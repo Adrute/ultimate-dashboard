@@ -227,6 +227,12 @@ export type Database = {
         };
         Returns: boolean;
       };
+      search_tasks: {
+        Args: {
+          search_query: string;
+        };
+        Returns: Database["public"]["Tables"]["tasks"]["Row"][];
+      };
     };
     Enums: {
       dashboard_widget_size: "small" | "medium" | "large";

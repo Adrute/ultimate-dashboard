@@ -2,7 +2,7 @@
 
 **Verificado:** 9 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F1-01
+**Ámbito:** sesiones de Codex usadas hasta F1-02
 
 ## Capacidades observadas
 
@@ -41,3 +41,7 @@ La disponibilidad declarada no cambió. F0-07 es documentación operativa rutina
 ## Aplicación en F1-01
 
 La disponibilidad declarada no cambió. F1-01 afecta esquema multiusuario, privilegios y RLS, por lo que se trató como cambio sensible y se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
+
+## Aplicación en F1-02
+
+La disponibilidad declarada no cambió. F1-02 incorpora una consulta SQL sujeta a RLS y se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
