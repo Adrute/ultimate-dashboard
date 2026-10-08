@@ -3,6 +3,7 @@ import Link from "next/link";
 import { primaryNavigationItems } from "./navigation";
 
 type PrimaryNavigationProps = Readonly<{
+  activeHref: string;
   compact?: boolean;
 }>;
 
@@ -14,7 +15,22 @@ function HomeIcon() {
   );
 }
 
-export function PrimaryNavigation({ compact = false }: PrimaryNavigationProps) {
+function DashboardIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+      <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+    </svg>
+  );
+}
+
+function NavigationIcon({ icon }: { icon: "dashboard" | "home" }) {
+  return icon === "home" ? <HomeIcon /> : <DashboardIcon />;
+}
+
+export function PrimaryNavigation({
+  activeHref,
+  compact = false,
+}: PrimaryNavigationProps) {
   return (
     <nav
       aria-label={compact ? "Navegación móvil" : "Navegación principal"}
@@ -27,11 +43,11 @@ export function PrimaryNavigation({ compact = false }: PrimaryNavigationProps) {
         {primaryNavigationItems.map((item) => (
           <li key={item.href}>
             <Link
-              aria-current="page"
+              aria-current={item.href === activeHref ? "page" : undefined}
               className="navigation-link"
               href={item.href}
             >
-              <HomeIcon />
+              <NavigationIcon icon={item.icon} />
               <span>{item.label}</span>
             </Link>
           </li>

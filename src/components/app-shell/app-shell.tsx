@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { PrimaryNavigation } from "./primary-navigation";
 
 type AppShellProps = Readonly<{
+  accountMenu?: ReactNode;
+  activeHref?: string;
   children: ReactNode;
 }>;
 
@@ -23,7 +25,11 @@ function MenuIcon() {
   );
 }
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({
+  accountMenu,
+  activeHref = "/",
+  children,
+}: AppShellProps) {
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main-content">
@@ -44,12 +50,16 @@ export function AppShell({ children }: AppShellProps) {
           <strong>Personal</strong>
         </div>
 
-        <PrimaryNavigation />
+        <PrimaryNavigation activeHref={activeHref} />
 
-        <p className="sidebar-note">
-          <span aria-hidden="true" className="status-dot" />
-          Nombre provisional
-        </p>
+        <div className="sidebar-footer">
+          {accountMenu ?? (
+            <p className="sidebar-note">
+              <span aria-hidden="true" className="status-dot" />
+              Nombre provisional
+            </p>
+          )}
+        </div>
       </aside>
 
       <div className="app-viewport">
@@ -69,7 +79,10 @@ export function AppShell({ children }: AppShellProps) {
               <span>Menú</span>
             </summary>
             <div className="mobile-menu-panel">
-              <PrimaryNavigation compact />
+              <PrimaryNavigation activeHref={activeHref} compact />
+              {accountMenu && (
+                <div className="mobile-account-menu">{accountMenu}</div>
+              )}
             </div>
           </details>
         </header>

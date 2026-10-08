@@ -11,6 +11,7 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 
 - F0-01 completado: scaffold mínimo de Next.js con App Router, TypeScript estricto, ESLint, Prettier y Vitest.
 - F0-02 completado: tokens visuales semánticos, shell base y navegación responsive accesible.
+- F0-03 implementado: autenticación SSR con Supabase, perfiles privados con RLS y ruta protegida.
 
 No hay servicios externos configurados.
 
@@ -23,10 +24,13 @@ No hay servicios externos configurados.
 
 ```bash
 npm install
+npm run supabase:start
 npm run dev
 ```
 
 La aplicación queda disponible en `http://localhost:3000`.
+
+Para habilitar autenticación, copia `.env.example` a `.env.local` y completa la URL y la clave publicable mostradas por `npm run supabase:start` o por el panel del proyecto. No uses una clave `service_role` en variables `NEXT_PUBLIC_*`.
 
 ## Controles
 
@@ -35,6 +39,7 @@ npm run format:check
 npm run lint
 npm run typecheck
 npm run test:unit
+npm run test:db
 npm run build
 ```
 

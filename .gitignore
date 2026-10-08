@@ -13,9 +13,16 @@
 
 # local environment files
 .env*
+!.env.example
 
 # deployment
 .vercel
+
+# local Docker client configuration
+.docker-local/
+
+# local Supabase runtime state
+supabase/.temp/
 
 # TypeScript
 *.tsbuildinfo
