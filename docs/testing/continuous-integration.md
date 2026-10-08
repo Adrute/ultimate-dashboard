@@ -9,7 +9,7 @@ El pipeline contiene dos trabajos independientes:
 - `Application checks`: instala con `npm ci`, ejecuta formato, ESLint, TypeScript estricto, pruebas unitarias y el build de Next.js.
 - `Database isolation tests`: levanta un Supabase efímero en Docker, reproduce todas las migraciones, ejecuta pgTAP y revisa el esquema con `supabase db lint`.
 
-Las versiones de Node, npm y Supabase CLI quedan fijadas por el workflow, `package.json` y `package-lock.json`. Las acciones de GitHub también están ancladas a los commits publicados como `checkout` 7.0.1 y `setup-node` 7.1.0. No se requieren secretos de GitHub ni credenciales de Supabase.
+Las versiones de Ubuntu, Node, npm y Supabase CLI quedan fijadas por el workflow, `package.json` y `package-lock.json`. Las acciones de GitHub también están ancladas a los commits publicados como `checkout` 7.0.1 y `setup-node` 7.1.0. No se requieren secretos de GitHub ni credenciales de Supabase.
 
 ## Aislamiento cubierto
 
