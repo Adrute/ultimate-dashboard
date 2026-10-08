@@ -18,6 +18,7 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 - F0-05 completado: aislamiento entre espacios y pipeline CI.
 - F0-06 completado: dashboard configurable con widgets persistentes.
 - F0-07 completado: plantillas de PR y ADR y checklist de seguridad.
+- F1-01 implementado: captura y gestión básica de tareas personales/compartidas con RLS.
 
 No hay servicios externos configurados.
 

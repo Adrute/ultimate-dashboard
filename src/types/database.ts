@@ -149,6 +149,50 @@ export type Database = {
           },
         ];
       };
+      tasks: {
+        Row: {
+          completed_at: string | null;
+          created_at: string;
+          created_by: string | null;
+          description: string | null;
+          due_date: string | null;
+          id: string;
+          priority: Database["public"]["Enums"]["task_priority"];
+          space_id: string;
+          status: Database["public"]["Enums"]["task_status"];
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          completed_at?: string | null;
+          created_at?: string;
+          created_by: string;
+          description?: string | null;
+          due_date?: string | null;
+          id?: string;
+          priority?: Database["public"]["Enums"]["task_priority"];
+          space_id: string;
+          status?: Database["public"]["Enums"]["task_status"];
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          description?: string | null;
+          due_date?: string | null;
+          priority?: Database["public"]["Enums"]["task_priority"];
+          status?: Database["public"]["Enums"]["task_status"];
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tasks_space_id_fkey";
+            columns: ["space_id"];
+            isOneToOne: false;
+            referencedRelation: "spaces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       spaces: {
         Row: {
           created_at: string;
@@ -201,6 +245,8 @@ export type Database = {
         | "projects"
         | "recipes";
       space_role: "admin" | "editor" | "viewer";
+      task_priority: "none" | "low" | "medium" | "high";
+      task_status: "todo" | "in_progress" | "done";
     };
     CompositeTypes: Record<never, never>;
   };

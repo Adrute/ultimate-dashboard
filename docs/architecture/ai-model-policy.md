@@ -2,7 +2,7 @@
 
 **Verificado:** 9 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F0-07
+**Ámbito:** sesiones de Codex usadas hasta F1-01
 
 ## Capacidades observadas
 
@@ -37,3 +37,7 @@ La disponibilidad declarada no cambió. F0-06 combina UI accesible, acciones de 
 ## Aplicación en F0-07
 
 La disponibilidad declarada no cambió. F0-07 es documentación operativa rutinaria y se ejecutó secuencialmente, sin delegación ni cambios de dependencias. El entorno continúa sin exponer el identificador exacto, razonamiento o coste del orquestador activo.
+
+## Aplicación en F1-01
+
+La disponibilidad declarada no cambió. F1-01 afecta esquema multiusuario, privilegios y RLS, por lo que se trató como cambio sensible y se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.

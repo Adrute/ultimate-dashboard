@@ -23,8 +23,18 @@ function DashboardIcon() {
   );
 }
 
-function NavigationIcon({ icon }: { icon: "dashboard" | "home" }) {
-  return icon === "home" ? <HomeIcon /> : <DashboardIcon />;
+function TasksIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+      <path d="m5 7 1.5 1.5L9.5 5M11 7h8M5 13l1.5 1.5 3-3M11 13h8M5 19l1.5 1.5 3-3M11 19h8" />
+    </svg>
+  );
+}
+
+function NavigationIcon({ icon }: { icon: "dashboard" | "home" | "tasks" }) {
+  if (icon === "home") return <HomeIcon />;
+  if (icon === "tasks") return <TasksIcon />;
+  return <DashboardIcon />;
 }
 
 export function PrimaryNavigation({
