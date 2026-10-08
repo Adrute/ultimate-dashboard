@@ -6,6 +6,8 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 
 - `MASTER_SPEC.md`: alcance, diseño, arquitectura, seguridad, agentes y roadmap.
 - `AGENTS.md`: instrucciones operativas para Codex en VS Code.
+- `docs/architecture/decisions`: plantilla e índice de decisiones de arquitectura.
+- `docs/security/review-checklist.md`: revisión de seguridad por cambio.
 
 ## Estado
 
@@ -14,7 +16,8 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 - F0-03 completado: autenticación SSR con Supabase, perfiles privados con RLS y ruta protegida.
 - F0-04 completado: espacios personales y compartidos, roles, módulos y RLS.
 - F0-05 completado: aislamiento entre espacios y pipeline CI.
-- F0-06 implementado: dashboard configurable con widgets persistentes.
+- F0-06 completado: dashboard configurable con widgets persistentes.
+- F0-07 completado: plantillas de PR y ADR y checklist de seguridad.
 
 No hay servicios externos configurados.
 

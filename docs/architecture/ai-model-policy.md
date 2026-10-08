@@ -1,7 +1,8 @@
 # Política de modelos de IA
 
-**Verificado:** 8 de octubre de 2026  
-**Ámbito:** sesiones de Codex usadas hasta F0-06
+**Verificado:** 9 de octubre de 2026
+
+**Ámbito:** sesiones de Codex usadas hasta F0-07
 
 ## Capacidades observadas
 
@@ -32,3 +33,7 @@ La disponibilidad declarada no cambió. La ampliación de pruebas de aislamiento
 ## Aplicación en F0-06
 
 La disponibilidad declarada no cambió. F0-06 combina UI accesible, acciones de servidor, persistencia y RLS, y se ejecutó secuencialmente sin delegación ni dependencias nuevas. El entorno continúa sin exponer el identificador exacto, razonamiento o coste del orquestador activo.
+
+## Aplicación en F0-07
+
+La disponibilidad declarada no cambió. F0-07 es documentación operativa rutinaria y se ejecutó secuencialmente, sin delegación ni cambios de dependencias. El entorno continúa sin exponer el identificador exacto, razonamiento o coste del orquestador activo.
