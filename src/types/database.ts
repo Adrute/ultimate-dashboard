@@ -9,6 +9,71 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      dashboard_layouts: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_default: boolean;
+          name: string;
+          owner_user_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_default?: boolean;
+          name: string;
+          owner_user_id: string;
+          updated_at?: string;
+        };
+        Update: Record<never, never>;
+        Relationships: [];
+      };
+      dashboard_widgets: {
+        Row: {
+          created_at: string;
+          id: string;
+          layout_id: string;
+          position: number;
+          size: Database["public"]["Enums"]["dashboard_widget_size"];
+          space_id: string;
+          title: string;
+          updated_at: string;
+          widget_type: "placeholder";
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          layout_id: string;
+          position: number;
+          size?: Database["public"]["Enums"]["dashboard_widget_size"];
+          space_id: string;
+          title: string;
+          updated_at?: string;
+          widget_type?: "placeholder";
+        };
+        Update: {
+          position?: number;
+          size?: Database["public"]["Enums"]["dashboard_widget_size"];
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "dashboard_widgets_layout_id_fkey";
+            columns: ["layout_id"];
+            isOneToOne: false;
+            referencedRelation: "dashboard_layouts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "dashboard_widgets_space_id_fkey";
+            columns: ["space_id"];
+            isOneToOne: false;
+            referencedRelation: "spaces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           created_at: string;
@@ -110,8 +175,17 @@ export type Database = {
       };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      move_dashboard_widget: {
+        Args: {
+          move_direction: string;
+          target_widget_id: string;
+        };
+        Returns: boolean;
+      };
+    };
     Enums: {
+      dashboard_widget_size: "small" | "medium" | "large";
       space_kind: "personal" | "shared";
       space_module_key:
         | "dashboard"

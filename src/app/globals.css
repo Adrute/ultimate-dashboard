@@ -720,6 +720,325 @@ a {
   max-width: 14ch;
 }
 
+.dashboard-page {
+  width: min(100%, 92rem);
+}
+
+.dashboard-feedback {
+  margin: var(--space-6) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.dashboard-feedback.is-error {
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
+  background: color-mix(in srgb, var(--danger) 8%, var(--surface-raised));
+  color: var(--danger);
+}
+
+.dashboard-feedback.is-success {
+  border-color: color-mix(in srgb, var(--success) 45%, var(--border));
+  background: color-mix(in srgb, var(--success) 8%, var(--surface-raised));
+  color: var(--success);
+}
+
+.widget-composer {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.75fr) minmax(20rem, 1.25fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin-top: var(--space-7);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+}
+
+.widget-composer h2,
+.widget-area-heading h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  letter-spacing: -0.04em;
+}
+
+.widget-composer > div > p:last-child {
+  max-width: 30rem;
+  margin: var(--space-3) 0 0;
+  color: var(--text-secondary);
+}
+
+.widget-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9rem, 0.35fr) auto;
+  align-items: end;
+  gap: var(--space-3);
+}
+
+.widget-form label,
+.resize-form label {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.widget-form label:first-of-type {
+  grid-column: 1;
+}
+
+.widget-form label:last-of-type {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.widget-form input,
+.widget-form select,
+.resize-form select {
+  min-height: 2.875rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-canvas);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.widget-form input {
+  grid-column: 1;
+}
+
+.widget-form select {
+  grid-column: 2;
+}
+
+.button-primary {
+  min-height: 2.875rem;
+  cursor: pointer;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font: inherit;
+  font-weight: 750;
+}
+
+.button-primary:hover {
+  background: var(--accent-strong);
+}
+
+.widget-form .button-primary {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.widget-area {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+.widget-area-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.widget-count {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.dashboard-empty-state {
+  display: grid;
+  min-height: 20rem;
+  place-items: center;
+  align-content: center;
+  margin-top: var(--space-5);
+  padding: var(--space-6);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.dashboard-empty-state > span {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border-radius: 1.1rem;
+  background: var(--surface-accent-soft);
+  color: var(--accent-strong);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.dashboard-empty-state h3 {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: 1.25rem;
+}
+
+.dashboard-empty-state p {
+  max-width: 31rem;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.widget-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.dashboard-widget {
+  display: flex;
+  min-width: 0;
+  min-height: 15rem;
+  flex-direction: column;
+  grid-column: span 6;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: 0 0.7rem 2rem rgb(77 62 45 / 7%);
+}
+
+.dashboard-widget.is-small {
+  grid-column: span 4;
+}
+
+.dashboard-widget.is-large {
+  grid-column: 1 / -1;
+}
+
+.dashboard-widget > header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.dashboard-widget header span {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.dashboard-widget h3 {
+  margin: var(--space-2) 0 0;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-widget > p {
+  margin: var(--space-5) 0;
+  color: var(--text-secondary);
+}
+
+.widget-grip {
+  letter-spacing: 0.15em !important;
+}
+
+.widget-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.widget-controls form {
+  margin: 0;
+}
+
+.widget-controls button {
+  min-height: 2.5rem;
+  cursor: pointer;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.widget-controls button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background: var(--surface-canvas);
+}
+
+.widget-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.widget-controls .button-danger {
+  color: var(--danger);
+}
+
+.resize-form {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: var(--space-1) var(--space-2);
+}
+
+.resize-form label {
+  grid-column: 1 / -1;
+}
+
+.resize-form select {
+  min-height: 2.5rem;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 72rem) {
+  .widget-composer {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-widget.is-small,
+  .dashboard-widget {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 48rem) {
+  .widget-form {
+    grid-template-columns: 1fr;
+  }
+
+  .widget-form label:first-of-type,
+  .widget-form label:last-of-type,
+  .widget-form input,
+  .widget-form select,
+  .widget-form .button-primary {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .dashboard-widget,
+  .dashboard-widget.is-small,
+  .dashboard-widget.is-large {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 32rem) {
   .auth-actions {
     grid-template-columns: 1fr;

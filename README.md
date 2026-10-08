@@ -11,7 +11,10 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 
 - F0-01 completado: scaffold mínimo de Next.js con App Router, TypeScript estricto, ESLint, Prettier y Vitest.
 - F0-02 completado: tokens visuales semánticos, shell base y navegación responsive accesible.
-- F0-03 implementado: autenticación SSR con Supabase, perfiles privados con RLS y ruta protegida.
+- F0-03 completado: autenticación SSR con Supabase, perfiles privados con RLS y ruta protegida.
+- F0-04 completado: espacios personales y compartidos, roles, módulos y RLS.
+- F0-05 completado: aislamiento entre espacios y pipeline CI.
+- F0-06 implementado: dashboard configurable con widgets persistentes.
 
 No hay servicios externos configurados.
 
