@@ -1,7 +1,7 @@
 # Política de modelos de IA
 
 **Verificado:** 8 de octubre de 2026  
-**Ámbito:** sesión de Codex usada para F0-01
+**Ámbito:** sesiones de Codex usadas hasta F0-04
 
 ## Capacidades observadas
 
@@ -20,3 +20,7 @@ El identificador exacto del orquestador activo, su nivel de razonamiento y el co
 F0-01 es un cambio rutinario y acotado. Se ejecutó de forma secuencial con el orquestador activo, sin delegación. Para futuras tareas se seleccionará el modelo más rápido compatible con cambios rutinarios y el modelo de codificación más capaz disponible, con razonamiento alto, para arquitectura, seguridad, OAuth, migraciones o RLS.
 
 Esta lista debe volver a verificarse al iniciar una sesión relevante; no constituye una garantía permanente de disponibilidad, precio o límites.
+
+## Aplicación en F0-04
+
+La sesión volvió a comunicar los mismos identificadores el 8 de octubre de 2026. F0-04 afecta esquema, autorización y RLS, por lo que se trató como tarea sensible y se ejecutó secuencialmente con razonamiento alto. El entorno siguió sin exponer el identificador exacto ni el coste del orquestador activo; no se atribuye la ejecución a uno de los modelos delegables sin evidencia.
