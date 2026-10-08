@@ -1,0 +1,9 @@
+.next
+AGENTS.md
+build
+coverage
+MASTER_SPEC.md
+node_modules
+out
+package-lock.json
+UltimateDashboard_Documento_Maestro.pdf
