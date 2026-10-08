@@ -1,7 +1,7 @@
 # Política de modelos de IA
 
 **Verificado:** 8 de octubre de 2026  
-**Ámbito:** sesiones de Codex usadas hasta F0-04
+**Ámbito:** sesiones de Codex usadas hasta F0-05
 
 ## Capacidades observadas
 
@@ -24,3 +24,7 @@ Esta lista debe volver a verificarse al iniciar una sesión relevante; no consti
 ## Aplicación en F0-04
 
 La sesión volvió a comunicar los mismos identificadores el 8 de octubre de 2026. F0-04 afecta esquema, autorización y RLS, por lo que se trató como tarea sensible y se ejecutó secuencialmente con razonamiento alto. El entorno siguió sin exponer el identificador exacto ni el coste del orquestador activo; no se atribuye la ejecución a uno de los modelos delegables sin evidencia.
+
+## Aplicación en F0-05
+
+La disponibilidad declarada no cambió. La ampliación de pruebas de aislamiento y CI se ejecutó secuencialmente, sin delegación. El identificador, nivel de razonamiento y coste del orquestador activo continúan sin estar expuestos por el entorno.
