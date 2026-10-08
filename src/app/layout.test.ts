@@ -4,6 +4,8 @@ import { metadata } from "./layout";
 
 describe("application metadata", () => {
   it("keeps the provisional product name", () => {
-    expect(metadata.title).toBe("UltimateDashboard");
+    expect(metadata.title).toMatchObject({
+      default: "UltimateDashboard",
+    });
   });
 });

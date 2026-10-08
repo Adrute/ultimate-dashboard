@@ -9,7 +9,10 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 
 ## Estado
 
-F0-01 completado: scaffold mínimo de Next.js con App Router, TypeScript estricto, ESLint, Prettier y Vitest. No hay servicios externos configurados.
+- F0-01 completado: scaffold mínimo de Next.js con App Router, TypeScript estricto, ESLint, Prettier y Vitest.
+- F0-02 completado: tokens visuales semánticos, shell base y navegación responsive accesible.
+
+No hay servicios externos configurados.
 
 ## Requisitos
 

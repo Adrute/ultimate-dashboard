@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { AppShell } from "@/components/app-shell/app-shell";
+
+import "./globals.css";
+
 export const metadata: Metadata = {
-  title: "UltimateDashboard",
+  title: {
+    default: "UltimateDashboard",
+    template: "%s · UltimateDashboard",
+  },
   description: "Suite personal y colaborativa.",
 };
 
@@ -13,7 +20,9 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }
