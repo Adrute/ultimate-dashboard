@@ -19,7 +19,8 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 - F0-06 completado: dashboard configurable con widgets persistentes.
 - F0-07 completado: plantillas de PR y ADR y checklist de seguridad.
 - F1-01 completado: captura y gestión básica de tareas personales/compartidas con RLS.
-- F1-02 implementado: búsqueda inicial de tareas autorizadas por título y descripción.
+- F1-02 completado: búsqueda inicial de tareas autorizadas por título y descripción.
+- F1-03 implementado: PWA instalable con fallback offline sin cachear datos privados.
 
 No hay servicios externos configurados.
 
@@ -37,6 +38,8 @@ npm run dev
 ```
 
 La aplicación queda disponible en `http://localhost:3000`.
+
+El service worker se registra únicamente en compilaciones de producción. Para probar la instalación y el fallback offline usa `npm run build && npm run start`.
 
 Para habilitar autenticación, copia `.env.example` a `.env.local` y completa la URL y la clave publicable mostradas por `npm run supabase:start` o por el panel del proyecto. No uses una clave `service_role` en variables `NEXT_PUBLIC_*`.
 

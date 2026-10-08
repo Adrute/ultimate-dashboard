@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="UltimateDashboard">
+  <rect width="512" height="512" rx="120" fill="#9c5539"/>
+  <path d="M142 132v154c0 72 42 110 114 110s114-38 114-110V132h-70v151c0 34-13 51-44 51s-44-17-44-51V132z" fill="#fffaf4"/>
+  <circle cx="369" cy="371" r="25" fill="#95c7b4"/>
+</svg>
