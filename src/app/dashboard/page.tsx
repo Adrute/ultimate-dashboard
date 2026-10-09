@@ -68,12 +68,11 @@ export default async function DashboardPage({
 
   return (
     <main className="page-shell dashboard-page" id="main-content" tabIndex={-1}>
-      <header className="page-heading dashboard-heading">
+      <header className="page-heading dashboard-heading dashboard-hero">
         <p className="eyebrow">Panel personal</p>
-        <h1>Tu día, a tu manera.</h1>
+        <h1>Buenos días, {user.displayName ?? "Adrián"} 👋</h1>
         <p className="page-introduction">
-          Organiza tarjetas sencillas ahora. Los widgets de cada módulo llegarán
-          con sus respectivos verticales.
+          “Disciplina hoy, más tiempo mañana.”
         </p>
       </header>
 

@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAuthenticatedUser } from "@/lib/auth/session";
+import { createTaskSchema } from "@/lib/tasks/task-input";
 import {
   createProjectSchema,
   deleteProjectSchema,
@@ -9,6 +10,33 @@ import {
 } from "@/lib/projects/project-input";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 const value = (data: FormData, key: string) => data.get(key);
+export async function createRelatedTask(formData: FormData) {
+  const user = await requireAuthenticatedUser();
+  const input = createTaskSchema.safeParse({
+    description: "",
+    dueDate: "",
+    parentTaskId: value(formData, "parentTaskId"),
+    priority: "none",
+    projectId: value(formData, "projectId"),
+    spaceId: value(formData, "spaceId"),
+    title: value(formData, "title"),
+  });
+  if (!input.success) redirect("/projects?error=invalid_input");
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.from("tasks").insert({
+    created_by: user.id,
+    description: null,
+    due_date: null,
+    parent_task_id: input.data.parentTaskId,
+    priority: "none",
+    project_id: input.data.projectId,
+    space_id: input.data.spaceId,
+    title: input.data.title,
+  });
+  if (error) redirect("/projects?error=create_failed");
+  revalidatePath("/projects");
+  redirect("/projects?message=updated");
+}
 export async function createProject(formData: FormData) {
   const user = await requireAuthenticatedUser();
   const input = createProjectSchema.safeParse({

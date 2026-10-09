@@ -21,6 +21,8 @@ export async function createTask(formData: FormData) {
     description: value(formData, "description"),
     dueDate: value(formData, "dueDate"),
     priority: value(formData, "priority"),
+    projectId: value(formData, "projectId"),
+    parentTaskId: value(formData, "parentTaskId"),
     spaceId: value(formData, "spaceId"),
     title: value(formData, "title"),
   });
@@ -33,6 +35,8 @@ export async function createTask(formData: FormData) {
     description: input.data.description,
     due_date: input.data.dueDate,
     priority: input.data.priority,
+    project_id: input.data.projectId,
+    parent_task_id: input.data.parentTaskId,
     space_id: input.data.spaceId,
     title: input.data.title,
   });

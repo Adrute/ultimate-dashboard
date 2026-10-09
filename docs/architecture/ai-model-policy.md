@@ -2,7 +2,7 @@
 
 **Verificado:** 9 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-02
+**Ámbito:** sesiones de Codex usadas hasta F2-03
 
 ## Capacidades observadas
 
@@ -57,3 +57,7 @@ La disponibilidad declarada no cambió. F2-01 afecta datos compartidos, privileg
 ## Aplicación en F2-02
 
 La disponibilidad declarada no cambió. F2-02 afecta datos compartidos, restricciones y RLS, por lo que se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
+
+## Aplicación en F2-03
+
+La disponibilidad declarada no cambió. F2-03 combina integridad jerárquica, RLS y un cambio visual transversal, por lo que se ejecutó secuencialmente con razonamiento alto. Se usó la herramienta integrada de generación de imágenes únicamente para crear una cabecera original; no se añadieron dependencias ni credenciales.

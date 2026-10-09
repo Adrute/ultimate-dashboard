@@ -28,6 +28,168 @@
   --sidebar-width: 17rem;
 }
 
+/* F2 visual realignment: compact, modular and blue-accented like the agreed reference. */
+:root {
+  --surface-canvas: #f4f6f9;
+  --surface-raised: #ffffff;
+  --surface-subtle: #f1f5fb;
+  --surface-accent-soft: #eaf1ff;
+  --text-primary: #15213a;
+  --text-secondary: #68758d;
+  --accent: #397cf6;
+  --accent-strong: #235ec7;
+  --border: #e4e9f1;
+  --border-strong: #ccd5e3;
+  --focus: #397cf6;
+  --success: #20a978;
+  --shadow-soft: 0 0.65rem 2rem rgb(28 45 78 / 8%);
+  --sidebar-width: 10rem;
+  --radius-sm: 0.55rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.9rem;
+}
+
+body {
+  background: var(--surface-canvas);
+  font-size: 0.9rem;
+}
+.desktop-sidebar {
+  padding: 1.25rem 0.75rem;
+  background: #fff;
+  backdrop-filter: none;
+}
+.brand {
+  padding-inline: 0.35rem;
+}
+.brand-mark {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.45rem;
+  background: linear-gradient(135deg, #1aa777, #397cf6);
+  box-shadow: none;
+}
+.brand-copy strong {
+  font-size: 0.9rem;
+}
+.brand-copy span,
+.workspace-card {
+  display: none;
+}
+.primary-navigation {
+  margin-top: 1.5rem;
+}
+.navigation-label {
+  display: none;
+}
+.primary-navigation ul {
+  gap: 0.2rem;
+}
+.navigation-link {
+  min-height: 2.3rem;
+  gap: 0.7rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.78rem;
+}
+.navigation-link[aria-current="page"] {
+  background: #eaf1ff;
+  color: #245bb7;
+}
+.page-shell {
+  width: min(100%, 92rem);
+  padding: 1rem 1.25rem 3rem;
+}
+.page-heading h1 {
+  max-width: none;
+  font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+.page-introduction {
+  margin-top: 0.65rem;
+  font-size: 0.95rem;
+}
+.dashboard-hero {
+  max-width: none;
+  min-height: 10.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(90deg, rgb(10 22 43 / 82%), rgb(10 22 43 / 10%)),
+    url("/images/dashboard-city-sunset.png") center 54% / cover;
+  color: white;
+  box-shadow: var(--shadow-soft);
+}
+.dashboard-hero .eyebrow,
+.dashboard-hero .page-introduction {
+  color: white;
+}
+.widget-composer,
+.note-composer,
+.project-composer,
+.task-composer {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+.widget-area,
+.notes-list-section,
+.projects-list-section,
+.task-list-section {
+  margin-top: 1.5rem;
+}
+.dashboard-widget,
+.note-card,
+.project-card,
+.task-card {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+.project-task-list {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+.project-task-list > div {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.35rem;
+  border-radius: 0.4rem;
+  background: var(--surface-subtle);
+  font-size: 0.8rem;
+}
+.project-task-list > div.is-subtask {
+  margin-left: 1rem;
+}
+.project-task-form {
+  display: grid;
+  grid-template-columns: 1fr 2rem;
+  gap: 0.35rem;
+}
+.project-task-form.is-subtask {
+  margin-left: 1rem;
+}
+.project-task-form input {
+  min-width: 0;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: white;
+}
+.project-task-form button {
+  border: 0;
+  border-radius: 0.4rem;
+  background: var(--accent);
+  color: white;
+  font-weight: 800;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;

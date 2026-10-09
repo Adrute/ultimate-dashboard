@@ -236,6 +236,8 @@ export type Database = {
           due_date: string | null;
           id: string;
           priority: Database["public"]["Enums"]["task_priority"];
+          project_id: string | null;
+          parent_task_id: string | null;
           space_id: string;
           status: Database["public"]["Enums"]["task_status"];
           title: string;
@@ -249,6 +251,8 @@ export type Database = {
           due_date?: string | null;
           id?: string;
           priority?: Database["public"]["Enums"]["task_priority"];
+          project_id?: string | null;
+          parent_task_id?: string | null;
           space_id: string;
           status?: Database["public"]["Enums"]["task_status"];
           title: string;
@@ -258,6 +262,8 @@ export type Database = {
           description?: string | null;
           due_date?: string | null;
           priority?: Database["public"]["Enums"]["task_priority"];
+          project_id?: string | null;
+          parent_task_id?: string | null;
           status?: Database["public"]["Enums"]["task_status"];
           title?: string;
         };

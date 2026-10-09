@@ -24,6 +24,14 @@ export const createTaskSchema = z.object({
     .union([dateSchema, z.literal("")])
     .transform((value) => value || null),
   priority: taskPrioritySchema,
+  projectId: z
+    .union([z.uuid(), z.literal("")])
+    .nullish()
+    .transform((value) => value || null),
+  parentTaskId: z
+    .union([z.uuid(), z.literal("")])
+    .nullish()
+    .transform((value) => value || null),
   spaceId: z.uuid(),
   title: z.string().trim().min(1).max(160),
 });
