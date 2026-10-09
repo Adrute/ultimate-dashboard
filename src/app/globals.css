@@ -193,20 +193,20 @@ body {
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --surface-canvas: #1e1c19;
-    --surface-raised: #292622;
-    --surface-subtle: #34302a;
-    --surface-accent-soft: #493128;
-    --text-primary: #f7f0e5;
-    --text-secondary: #bdb3a5;
-    --text-on-accent: #fffaf4;
-    --accent: #d98a68;
-    --accent-strong: #efaa8a;
-    --border: #454039;
-    --border-strong: #5b5349;
-    --focus: #95c7b4;
-    --danger: #ee8a8a;
-    --success: #84c5aa;
+    --surface-canvas: #101725;
+    --surface-raised: #172033;
+    --surface-subtle: #202b40;
+    --surface-accent-soft: #20385f;
+    --text-primary: #f3f6fc;
+    --text-secondary: #aebbd0;
+    --text-on-accent: #ffffff;
+    --accent: #6aa0ff;
+    --accent-strong: #91b8ff;
+    --border: #29364d;
+    --border-strong: #40506a;
+    --focus: #78a9ff;
+    --danger: #ff9292;
+    --success: #65d6ad;
     --shadow-soft: 0 1rem 3rem rgb(0 0 0 / 24%);
   }
 }
@@ -1473,6 +1473,416 @@ a {
 
   .task-actions {
     justify-content: flex-start;
+  }
+}
+
+/* F2-04: compact UI layer applied after the shared shell and task rules. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.desktop-sidebar {
+  width: var(--sidebar-width);
+  padding: 1.25rem 0.75rem;
+  background: var(--surface-raised);
+  backdrop-filter: none;
+}
+
+.desktop-sidebar .brand {
+  padding-inline: 0.35rem;
+}
+
+.desktop-sidebar .brand-mark {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.45rem;
+  background: linear-gradient(135deg, #1aa777, #397cf6);
+  box-shadow: none;
+}
+
+.desktop-sidebar .brand-copy strong {
+  font-size: 0.9rem;
+}
+
+.desktop-sidebar .brand-copy span,
+.desktop-sidebar .workspace-card,
+.desktop-sidebar .navigation-label {
+  display: none;
+}
+
+.desktop-sidebar .primary-navigation {
+  margin-top: 1.5rem;
+}
+
+.desktop-sidebar .primary-navigation ul {
+  gap: 0.2rem;
+  margin-top: 0;
+}
+
+.desktop-sidebar .navigation-link {
+  min-height: 2.3rem;
+  gap: 0.7rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+.page-shell {
+  width: min(100%, 92rem);
+  padding: 1.25rem 1.4rem 3rem;
+}
+
+.page-heading {
+  max-width: none;
+}
+
+.page-heading h1 {
+  max-width: none;
+  font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.page-introduction {
+  margin-top: 0.65rem;
+  font-size: 0.95rem;
+}
+
+.project-open-link {
+  display: inline-flex;
+  margin-top: var(--space-4);
+  color: var(--accent-strong);
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.project-detail-page {
+  width: min(100%, 76rem);
+}
+
+.project-detail-page > .back-link {
+  display: inline-flex;
+  margin-bottom: var(--space-5);
+  font-size: 0.84rem;
+  text-decoration: none;
+}
+
+.project-detail-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-6);
+  align-items: end;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(100deg, rgb(12 28 57 / 88%), rgb(12 28 57 / 30%)),
+    url("/images/dashboard-city-sunset.png") center 58% / cover;
+  color: white;
+  box-shadow: var(--shadow-soft);
+}
+
+.project-detail-header .eyebrow {
+  color: #dbe7ff;
+}
+
+.project-detail-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.project-detail-header p:last-child {
+  max-width: 44rem;
+  margin: var(--space-3) 0 0;
+  color: #eef3ff;
+}
+
+.project-detail-progress {
+  display: grid;
+  min-width: 8.5rem;
+  padding: var(--space-4);
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-md);
+  background: rgb(255 255 255 / 14%);
+  backdrop-filter: blur(0.6rem);
+}
+
+.project-detail-progress strong {
+  font-size: 1.65rem;
+}
+
+.project-detail-progress span {
+  font-size: 0.7rem;
+}
+
+.project-task-workspace {
+  margin-top: var(--space-4);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+}
+
+.project-task-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.project-task-heading .eyebrow {
+  margin-bottom: var(--space-1);
+}
+
+.project-task-heading h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.project-task-heading > span {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.root-task-composer,
+.subtask-composer form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+}
+
+.root-task-composer {
+  margin-top: var(--space-4);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+}
+
+.root-task-composer input,
+.subtask-composer input {
+  min-width: 0;
+  min-height: 2.5rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: calc(var(--radius-sm) - 0.15rem);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.project-task-tree {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-task-tree.is-nested {
+  position: relative;
+  margin: var(--space-2) 0 0 1.15rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--border-strong);
+}
+
+.project-task-node {
+  min-width: 0;
+}
+
+.project-task-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.project-task-node.is-done > .project-task-row {
+  background: color-mix(in srgb, var(--success) 5%, var(--surface-raised));
+}
+
+.project-task-node.is-done > .project-task-row .project-task-copy strong {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.task-check {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  cursor: pointer;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface-raised);
+  color: white;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.is-done > .project-task-row .task-check {
+  border-color: var(--success);
+  background: var(--success);
+}
+
+.project-task-copy {
+  min-width: 0;
+}
+
+.project-task-copy strong,
+.project-task-copy p,
+.project-task-copy time {
+  overflow-wrap: anywhere;
+}
+
+.project-task-copy p,
+.project-task-copy time {
+  display: block;
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.task-delete-button {
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.task-delete-button:hover {
+  color: var(--danger);
+}
+
+.subtask-composer {
+  margin: var(--space-1) 0 0 2.65rem;
+}
+
+.subtask-composer summary {
+  width: fit-content;
+  cursor: pointer;
+  padding: var(--space-1) 0;
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.subtask-composer form {
+  max-width: 32rem;
+  margin-top: var(--space-1);
+}
+
+.subtask-composer button {
+  cursor: pointer;
+  padding-inline: var(--space-3);
+  border: 0;
+  border-radius: calc(var(--radius-sm) - 0.15rem);
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.task-empty-state.is-compact {
+  min-height: 12rem;
+}
+
+.mobile-bottom-navigation {
+  display: none;
+}
+
+@media (max-width: 48rem) {
+  .page-shell {
+    padding: 1rem 1rem 6.5rem;
+  }
+
+  .mobile-header {
+    min-height: 3.75rem;
+    padding: 0.55rem 1rem;
+  }
+
+  .mobile-bottom-navigation {
+    position: fixed;
+    z-index: 18;
+    inset: auto 0 0;
+    display: block;
+    padding: 0.4rem max(0.35rem, env(safe-area-inset-right))
+      calc(0.4rem + env(safe-area-inset-bottom))
+      max(0.35rem, env(safe-area-inset-left));
+    border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface-raised) 94%, transparent);
+    backdrop-filter: blur(1rem);
+  }
+
+  .mobile-bottom-navigation .primary-navigation ul {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.1rem;
+    margin: 0;
+  }
+
+  .mobile-bottom-navigation .navigation-link {
+    min-height: 3.2rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: 0.3rem 0.1rem;
+    font-size: 0.6rem;
+  }
+
+  .mobile-bottom-navigation .navigation-link svg {
+    width: 1.15rem;
+  }
+
+  .project-detail-header {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .project-detail-progress {
+    min-width: 0;
+    width: fit-content;
+  }
+}
+
+@media (max-width: 32rem) {
+  .project-task-row {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .project-task-row > form:last-child {
+    grid-column: 2;
+  }
+
+  .root-task-composer,
+  .subtask-composer form {
+    grid-template-columns: 1fr;
+  }
+
+  .project-task-tree.is-nested {
+    margin-left: 0.6rem;
+    padding-left: 0.6rem;
   }
 }
 

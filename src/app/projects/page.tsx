@@ -1,12 +1,9 @@
+import Link from "next/link";
+
 import { ConfirmSubmitButton } from "@/components/forms/confirm-submit-button";
 import { requireAuthenticatedUser } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import {
-  createProject,
-  createRelatedTask,
-  deleteProject,
-  updateProject,
-} from "./actions";
+import { createProject, deleteProject, updateProject } from "./actions";
 import { getProjectFeedback } from "./feedback";
 export const metadata = { title: "Proyectos" };
 const statusLabels = {
@@ -22,34 +19,20 @@ export default async function ProjectsPage({
   const params = await searchParams;
   const feedback = getProjectFeedback(params.error, params.message);
   const supabase = await createSupabaseServerClient();
-  const [spacesResult, membersResult, projectsResult, tasksResult] =
-    await Promise.all([
-      supabase
-        .from("spaces")
-        .select("id,kind,name,owner_user_id")
-        .order("name"),
-      supabase
-        .from("space_members")
-        .select("role,space_id")
-        .eq("user_id", user.id),
-      supabase
-        .from("projects")
-        .select(
-          "description,due_date,id,name,progress,space_id,start_date,status,updated_at",
-        )
-        .order("updated_at", { ascending: false }),
-      supabase
-        .from("tasks")
-        .select("id,parent_task_id,project_id,space_id,title")
-        .not("project_id", "is", null)
-        .order("created_at"),
-    ]);
-  if (
-    spacesResult.error ||
-    membersResult.error ||
-    projectsResult.error ||
-    tasksResult.error
-  )
+  const [spacesResult, membersResult, projectsResult] = await Promise.all([
+    supabase.from("spaces").select("id,kind,name,owner_user_id").order("name"),
+    supabase
+      .from("space_members")
+      .select("role,space_id")
+      .eq("user_id", user.id),
+    supabase
+      .from("projects")
+      .select(
+        "description,due_date,id,name,progress,space_id,start_date,status,updated_at",
+      )
+      .order("updated_at", { ascending: false }),
+  ]);
+  if (spacesResult.error || membersResult.error || projectsResult.error)
     throw new Error("No se pudieron cargar los proyectos.");
   const editableShared = new Set(
     membersResult.data
@@ -207,84 +190,12 @@ export default async function ProjectsPage({
                     Fin previsto: {project.due_date}
                   </time>
                 )}
-                <div className="project-task-list">
-                  <strong>Tareas</strong>
-                  {tasksResult.data
-                    .filter((task) => task.project_id === project.id)
-                    .map((task) => (
-                      <div
-                        className={task.parent_task_id ? "is-subtask" : ""}
-                        key={task.id}
-                      >
-                        <span>{task.parent_task_id ? "↳" : "○"}</span>
-                        {task.title}
-                      </div>
-                    ))}
-                  {editableIds.has(project.space_id) && (
-                    <form
-                      action={createRelatedTask}
-                      className="project-task-form"
-                    >
-                      <input
-                        name="projectId"
-                        type="hidden"
-                        value={project.id}
-                      />
-                      <input
-                        name="spaceId"
-                        type="hidden"
-                        value={project.space_id}
-                      />
-                      <input name="parentTaskId" type="hidden" value="" />
-                      <input
-                        aria-label={`Nueva tarea para ${project.name}`}
-                        maxLength={160}
-                        name="title"
-                        placeholder="Nueva tarea"
-                        required
-                      />
-                      <button type="submit">+</button>
-                    </form>
-                  )}
-                  {editableIds.has(project.space_id) &&
-                    tasksResult.data
-                      .filter(
-                        (task) =>
-                          task.project_id === project.id &&
-                          !task.parent_task_id,
-                      )
-                      .map((task) => (
-                        <form
-                          action={createRelatedTask}
-                          className="project-task-form is-subtask"
-                          key={`sub-${task.id}`}
-                        >
-                          <input
-                            name="projectId"
-                            type="hidden"
-                            value={project.id}
-                          />
-                          <input
-                            name="spaceId"
-                            type="hidden"
-                            value={project.space_id}
-                          />
-                          <input
-                            name="parentTaskId"
-                            type="hidden"
-                            value={task.id}
-                          />
-                          <input
-                            aria-label={`Subtarea de ${task.title}`}
-                            maxLength={160}
-                            name="title"
-                            placeholder={`Subtarea de ${task.title}`}
-                            required
-                          />
-                          <button type="submit">↳</button>
-                        </form>
-                      ))}
-                </div>
+                <Link
+                  className="project-open-link"
+                  href={`/projects/${project.id}`}
+                >
+                  Abrir tareas →
+                </Link>
                 {editableIds.has(project.space_id) && (
                   <details>
                     <summary>Editar proyecto</summary>

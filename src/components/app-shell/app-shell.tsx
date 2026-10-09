@@ -88,6 +88,10 @@ export function AppShell({
         </header>
 
         {children}
+
+        <div className="mobile-bottom-navigation">
+          <PrimaryNavigation activeHref={activeHref} compact />
+        </div>
       </div>
     </div>
   );
