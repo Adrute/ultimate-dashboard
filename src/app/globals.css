@@ -1351,6 +1351,194 @@ a {
   color: var(--text-secondary);
 }
 
+.notes-page {
+  width: min(100%, 88rem);
+}
+
+.notes-heading h1 {
+  max-width: 13ch;
+}
+
+.note-composer {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.6fr) minmax(20rem, 1.4fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin-top: var(--space-7);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+}
+
+.note-composer h2,
+.notes-list-section h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  letter-spacing: -0.04em;
+}
+
+.note-composer > div > p:last-child {
+  color: var(--text-secondary);
+}
+
+.note-form {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.note-form label,
+.notes-filter label {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.note-form input,
+.note-form textarea,
+.note-form select,
+.notes-filter select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-canvas);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.note-form textarea {
+  resize: vertical;
+}
+
+.note-form .button-primary {
+  justify-self: start;
+  margin-top: var(--space-2);
+}
+
+.notes-list-section {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+.notes-filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-block: var(--space-3);
+  border-block: 1px solid var(--border);
+}
+
+.notes-filter select,
+.notes-filter button,
+.note-card summary,
+.note-delete-form button {
+  min-height: 2.5rem;
+  cursor: pointer;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.note-card {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+}
+
+.note-card > span,
+.note-card time {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+
+.note-card > span {
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.note-card h3 {
+  margin: var(--space-2) 0;
+  overflow-wrap: anywhere;
+}
+
+.note-preview {
+  display: -webkit-box;
+  min-height: 4.2rem;
+  margin: 0 0 var(--space-3);
+  overflow: hidden;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.note-card details {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.note-card summary {
+  display: inline-flex;
+  list-style: none;
+}
+
+.note-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.note-form.is-compact {
+  margin-top: var(--space-4);
+}
+
+.note-form.is-compact label {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.note-delete-form {
+  margin-top: var(--space-3);
+}
+
+.note-delete-form .button-danger {
+  color: var(--danger);
+}
+
+@media (max-width: 64rem) {
+  .note-composer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 42rem) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .notes-filter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 .search-page {
   width: min(100%, 76rem);
 }

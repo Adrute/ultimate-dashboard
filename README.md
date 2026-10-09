@@ -20,7 +20,8 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 - F0-07 completado: plantillas de PR y ADR y checklist de seguridad.
 - F1-01 completado: captura y gestión básica de tareas personales/compartidas con RLS.
 - F1-02 completado: búsqueda inicial de tareas autorizadas por título y descripción.
-- F1-03 implementado: PWA instalable con fallback offline sin cachear datos privados.
+- F1-03 completado: PWA instalable con fallback offline sin cachear datos privados.
+- F2-01 implementado: notas básicas personales/compartidas con texto plano y RLS.
 
 No hay servicios externos configurados.
 

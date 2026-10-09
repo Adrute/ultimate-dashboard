@@ -74,6 +74,39 @@ export type Database = {
           },
         ];
       };
+      notes: {
+        Row: {
+          body: string;
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          space_id: string;
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          body?: string;
+          created_at?: string;
+          created_by: string;
+          id?: string;
+          space_id: string;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          body?: string;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notes_space_id_fkey";
+            columns: ["space_id"];
+            isOneToOne: false;
+            referencedRelation: "spaces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           created_at: string;

@@ -40,14 +40,23 @@ function SearchIcon() {
   );
 }
 
+function NotesIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+      <path d="M6 3.75h9l3 3v13.5H6zM9 10h6M9 14h6M9 18h4" />
+    </svg>
+  );
+}
+
 function NavigationIcon({
   icon,
 }: {
-  icon: "dashboard" | "home" | "search" | "tasks";
+  icon: "dashboard" | "home" | "notes" | "search" | "tasks";
 }) {
   if (icon === "home") return <HomeIcon />;
   if (icon === "tasks") return <TasksIcon />;
   if (icon === "search") return <SearchIcon />;
+  if (icon === "notes") return <NotesIcon />;
   return <DashboardIcon />;
 }
 

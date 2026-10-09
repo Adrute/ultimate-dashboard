@@ -2,7 +2,7 @@
 
 **Verificado:** 9 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F1-03
+**Ámbito:** sesiones de Codex usadas hasta F2-01
 
 ## Capacidades observadas
 
@@ -49,3 +49,7 @@ La disponibilidad declarada no cambió. F1-02 incorpora una consulta SQL sujeta 
 ## Aplicación en F1-03
 
 La disponibilidad declarada no cambió. F1-03 es un cambio acotado de plataforma web y se ejecutó secuencialmente, sin delegación ni dependencias nuevas. La política offline se revisó con especial atención a no cachear datos privados. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
+
+## Aplicación en F2-01
+
+La disponibilidad declarada no cambió. F2-01 afecta datos compartidos, privilegios y RLS, por lo que se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
