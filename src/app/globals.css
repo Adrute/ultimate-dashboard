@@ -1314,6 +1314,163 @@ a {
   }
 }
 
+.projects-page {
+  width: min(100%, 88rem);
+}
+.projects-heading h1 {
+  max-width: 12ch;
+}
+.project-composer {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.6fr) minmax(20rem, 1.4fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin-top: var(--space-7);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+}
+.project-composer h2,
+.projects-list-section h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  letter-spacing: -0.04em;
+}
+.project-composer > div > p:last-child {
+  color: var(--text-secondary);
+}
+.project-form {
+  display: grid;
+  gap: var(--space-2);
+}
+.project-form label {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+.project-form input,
+.project-form textarea,
+.project-form select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-canvas);
+  color: var(--text-primary);
+  font: inherit;
+}
+.project-form textarea {
+  resize: vertical;
+}
+.project-form-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.project-form .button-primary {
+  justify-self: start;
+  margin-top: var(--space-2);
+}
+.projects-list-section {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+.project-card {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+}
+.project-card > span,
+.project-card time {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+.project-card > span {
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.project-card h3 {
+  margin: var(--space-2) 0;
+  overflow-wrap: anywhere;
+}
+.project-card > p {
+  color: var(--text-secondary);
+}
+.project-progress {
+  position: relative;
+  height: 1.6rem;
+  margin: var(--space-4) 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-subtle);
+}
+.project-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.project-progress strong {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+}
+.project-card details {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+.project-card summary,
+.project-delete-form button {
+  cursor: pointer;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.project-form.is-compact {
+  margin-top: var(--space-4);
+}
+.project-delete-form {
+  margin-top: var(--space-3);
+}
+.project-delete-form .button-danger {
+  color: var(--danger);
+}
+@media (max-width: 70rem) {
+  .project-form-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 64rem) {
+  .project-composer {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 42rem) {
+  .projects-grid,
+  .project-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .offline-page {
   display: grid;
   min-height: 100dvh;

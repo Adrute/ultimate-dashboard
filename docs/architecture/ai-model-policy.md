@@ -2,7 +2,7 @@
 
 **Verificado:** 9 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-01
+**Ámbito:** sesiones de Codex usadas hasta F2-02
 
 ## Capacidades observadas
 
@@ -53,3 +53,7 @@ La disponibilidad declarada no cambió. F1-03 es un cambio acotado de plataforma
 ## Aplicación en F2-01
 
 La disponibilidad declarada no cambió. F2-01 afecta datos compartidos, privilegios y RLS, por lo que se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
+
+## Aplicación en F2-02
+
+La disponibilidad declarada no cambió. F2-02 afecta datos compartidos, restricciones y RLS, por lo que se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.

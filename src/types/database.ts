@@ -107,6 +107,51 @@ export type Database = {
           },
         ];
       };
+      projects: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          description: string | null;
+          due_date: string | null;
+          id: string;
+          name: string;
+          progress: number;
+          space_id: string;
+          start_date: string | null;
+          status: Database["public"]["Enums"]["project_status"];
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by: string;
+          description?: string | null;
+          due_date?: string | null;
+          id?: string;
+          name: string;
+          progress?: number;
+          space_id: string;
+          start_date?: string | null;
+          status?: Database["public"]["Enums"]["project_status"];
+          updated_at?: string;
+        };
+        Update: {
+          description?: string | null;
+          due_date?: string | null;
+          name?: string;
+          progress?: number;
+          start_date?: string | null;
+          status?: Database["public"]["Enums"]["project_status"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "projects_space_id_fkey";
+            columns: ["space_id"];
+            isOneToOne: false;
+            referencedRelation: "spaces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           created_at: string;
@@ -269,6 +314,7 @@ export type Database = {
     };
     Enums: {
       dashboard_widget_size: "small" | "medium" | "large";
+      project_status: "planned" | "active" | "on_hold" | "completed";
       space_kind: "personal" | "shared";
       space_module_key:
         | "dashboard"

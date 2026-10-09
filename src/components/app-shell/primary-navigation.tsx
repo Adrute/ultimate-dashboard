@@ -48,15 +48,24 @@ function NotesIcon() {
   );
 }
 
+function ProjectsIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+      <path d="M4 6.5h6l1.5 2H20v10.75a.75.75 0 0 1-.75.75H4.75a.75.75 0 0 1-.75-.75z" />
+    </svg>
+  );
+}
+
 function NavigationIcon({
   icon,
 }: {
-  icon: "dashboard" | "home" | "notes" | "search" | "tasks";
+  icon: "dashboard" | "home" | "notes" | "projects" | "search" | "tasks";
 }) {
   if (icon === "home") return <HomeIcon />;
   if (icon === "tasks") return <TasksIcon />;
   if (icon === "search") return <SearchIcon />;
   if (icon === "notes") return <NotesIcon />;
+  if (icon === "projects") return <ProjectsIcon />;
   return <DashboardIcon />;
 }
 
