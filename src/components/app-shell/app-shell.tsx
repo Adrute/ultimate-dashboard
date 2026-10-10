@@ -76,13 +76,12 @@ export function AppShell({
           <details className="mobile-menu">
             <summary>
               <MenuIcon />
-              <span>{accountMenu ? "Cuenta" : "Menú"}</span>
+              <span>Menú</span>
             </summary>
             <div className="mobile-menu-panel">
-              {accountMenu ? (
+              <PrimaryNavigation activeHref={activeHref} compact />
+              {accountMenu && (
                 <div className="mobile-account-menu">{accountMenu}</div>
-              ) : (
-                <PrimaryNavigation activeHref={activeHref} compact />
               )}
             </div>
           </details>

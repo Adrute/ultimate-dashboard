@@ -10,7 +10,7 @@
 - Creación de una tarea raíz o de una subtarea desde cualquier nodo.
 - Completar, reabrir y eliminar tareas respetando permisos del espacio.
 - Navegación inferior móvil y capa visual compacta alineada con la referencia aprobada.
-- Navegación autenticada sin duplicar `Inicio` y `Panel`; el menú inferior solo se muestra en móvil.
+- Navegación autenticada sin duplicar `Inicio` y `Panel`; el menú inferior solo se muestra en móvil y el menú superior conserva navegación y cuenta en todas las rutas.
 - Creación de proyectos en un panel desplegable para mantener visible la vista general.
 
 No se añadieron dependencias, integraciones externas ni credenciales. La edición avanzada de los campos de una tarea, el orden manual y el arrastre entre niveles permanecen fuera de este vertical.
