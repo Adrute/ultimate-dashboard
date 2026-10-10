@@ -3114,3 +3114,125 @@ a {
     min-height: 18rem;
   }
 }
+
+/* F2-07: tables and internal page links */
+.note-internal-link-panel,
+.note-table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-subtle);
+}
+
+.note-internal-link-panel label {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 750;
+}
+
+.note-internal-link-panel select {
+  min-width: 0;
+  min-height: 2.3rem;
+  flex: 1;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.note-internal-link-panel button,
+.note-table-toolbar button {
+  min-height: 2.3rem;
+  cursor: pointer;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.note-table-toolbar {
+  flex-wrap: wrap;
+}
+
+.note-table-toolbar button.is-danger {
+  margin-left: auto;
+  color: var(--danger);
+}
+
+.rich-note-content .tableWrapper {
+  margin-block: var(--space-5);
+  overflow-x: auto;
+}
+
+.rich-note-content table {
+  width: 100%;
+  min-width: 32rem;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.rich-note-content th,
+.rich-note-content td {
+  position: relative;
+  min-width: 6rem;
+  padding: var(--space-3);
+  border: 1px solid var(--border-strong);
+  vertical-align: top;
+}
+
+.rich-note-content th {
+  background: var(--surface-subtle);
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.rich-note-content td {
+  background: var(--surface-raised);
+}
+
+.rich-note-content th > p,
+.rich-note-content td > p {
+  margin: 0;
+}
+
+.rich-note-content .selectedCell::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  content: "";
+  pointer-events: none;
+}
+
+@media (max-width: 42rem) {
+  .note-internal-link-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .note-internal-link-panel button {
+    width: 100%;
+  }
+
+  .note-table-toolbar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .note-table-toolbar button {
+    flex: 0 0 auto;
+  }
+
+  .note-table-toolbar button.is-danger {
+    margin-left: 0;
+  }
+}

@@ -15,6 +15,7 @@ El servidor no acepta HTML. Recibe JSON serializado y lo reconstruye mediante un
 
 - párrafos y encabezados de niveles 1 a 3;
 - listas ordenadas y no ordenadas;
+- tablas con filas, cabeceras y celdas acotadas;
 - citas, reglas horizontales, saltos y bloques de código;
 - negrita, cursiva, tachado, código en línea y enlaces;
 - enlaces limitados a HTTP, HTTPS, correo o rutas internas.
@@ -23,10 +24,12 @@ Se aplican límites de 200 KB serializados, 50.000 caracteres de texto, 2.000 no
 
 La interfaz de solo lectura utiliza el esquema de Tiptap, no `dangerouslySetInnerHTML`. El texto plano se deriva en servidor del documento validado, evitando confiar en un segundo valor enviado por el cliente.
 
+Los enlaces internos se generan exclusivamente desde las páginas que el servidor ya ha leído mediante RLS en el mismo espacio. Se guardan como rutas `/notes/{id}` y se abren en la pestaña actual. Esto no concede acceso adicional: la página de destino vuelve a comprobar la sesión y sus políticas al navegar.
+
 ## Compatibilidad y migración
 
 La migración `20261010143000_add_rich_note_content.sql` convierte las notas y versiones existentes en documentos con un párrafo, sin modificar migraciones anteriores. Las restauraciones recuperan título, jerarquía, texto plano y contenido enriquecido de forma conjunta.
 
 ## Fuera de alcance
 
-Tablas, imágenes, adjuntos, menciones, plantillas y edición colaborativa CRDT quedan para verticales posteriores. No se aceptan imágenes embebidas ni HTML arbitrario.
+Imágenes, adjuntos, menciones, plantillas y edición colaborativa CRDT quedan para verticales posteriores. No se aceptan imágenes embebidas ni HTML arbitrario.

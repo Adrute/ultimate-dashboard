@@ -143,6 +143,9 @@ export default async function NoteDetailPage({
             canEdit={canEdit}
             content={content}
             noteId={note.id}
+            pages={pages
+              .filter((page) => page.id !== note.id)
+              .map(({ id, title }) => ({ id, title }))}
             title={note.title}
           />
         </article>

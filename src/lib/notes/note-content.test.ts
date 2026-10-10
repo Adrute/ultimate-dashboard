@@ -73,6 +73,65 @@ describe("note content", () => {
     );
   });
 
+  it("keeps internal note links in the current tab", () => {
+    const document = safeParseNoteDocument({
+      content: [
+        {
+          content: [
+            {
+              marks: [
+                {
+                  attrs: {
+                    href: "/notes/11111111-1111-4111-8111-111111111111",
+                  },
+                  type: "link",
+                },
+              ],
+              text: "Otra página",
+              type: "text",
+            },
+          ],
+          type: "paragraph",
+        },
+      ],
+      type: "doc",
+    });
+
+    expect(
+      document?.content?.[0]?.content?.[0]?.marks?.[0]?.attrs?.target,
+    ).toBe("_self");
+  });
+
+  it("accepts a bounded table structure", () => {
+    const document = safeParseNoteDocument({
+      content: [
+        {
+          content: [
+            {
+              content: [
+                {
+                  attrs: { colspan: 1, colwidth: null, rowspan: 1 },
+                  content: [
+                    {
+                      content: [{ text: "Celda", type: "text" }],
+                      type: "paragraph",
+                    },
+                  ],
+                  type: "tableCell",
+                },
+              ],
+              type: "tableRow",
+            },
+          ],
+          type: "table",
+        },
+      ],
+      type: "doc",
+    });
+
+    expect(document?.content?.[0]?.type).toBe("table");
+  });
+
   it("rejects executable links and unsupported nodes", () => {
     expect(
       safeParseNoteDocument({
@@ -88,6 +147,12 @@ describe("note content", () => {
     ).toBeNull();
     expect(
       safeParseNoteDocument({ content: [{ type: "image" }], type: "doc" }),
+    ).toBeNull();
+    expect(
+      safeParseNoteDocument({
+        content: [{ content: [{ type: "tableCell" }], type: "table" }],
+        type: "doc",
+      }),
     ).toBeNull();
   });
 

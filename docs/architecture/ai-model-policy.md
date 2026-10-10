@@ -2,7 +2,7 @@
 
 **Verificado:** 10 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-06
+**Ámbito:** sesiones de Codex usadas hasta F2-07
 
 ## Capacidades observadas
 
@@ -73,3 +73,7 @@ La sesión volvió a declarar los mismos modelos delegables. F2-05 incorpora jer
 ## Aplicación en F2-06
 
 La sesión volvió a declarar los mismos modelos delegables y no expuso el identificador exacto del orquestador. F2-06 afecta contenido persistido, renderizado de texto enriquecido y superficie XSS, por lo que se ejecutó secuencialmente con razonamiento alto. Se verificó la compatibilidad declarada de Tiptap 3.31.4 con React 19 y la configuración SSR recomendada para Next.js antes de fijar las dependencias.
+
+## Aplicación en F2-07
+
+La sesión volvió a declarar los mismos modelos delegables y no expuso el identificador exacto del orquestador. F2-07 amplía el esquema de contenido aceptado y la navegación entre recursos autorizados, por lo que se ejecutó secuencialmente con razonamiento alto. Se verificó `TableKit` 3.31.4 contra la documentación oficial y se mantuvieron versiones exactas, sin agentes delegados ni servicios externos.

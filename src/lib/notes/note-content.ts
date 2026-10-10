@@ -14,11 +14,18 @@ const nodeTypes = new Set([
   "listItem",
   "orderedList",
   "paragraph",
+  "table",
+  "tableCell",
+  "tableHeader",
+  "tableRow",
   "text",
 ]);
 const markTypes = new Set(["bold", "code", "italic", "link", "strike"]);
 
-type NoteAttributes = Record<string, boolean | number | string>;
+type NoteAttributes = Record<
+  string,
+  boolean | null | number | number[] | string
+>;
 
 export type NoteMark = Readonly<{
   attrs?: NoteAttributes;
@@ -69,7 +76,7 @@ function normalizeMarks(value: unknown): NoteMark[] | null {
         attrs: {
           href,
           rel: "noopener noreferrer nofollow",
-          target: "_blank",
+          target: href.startsWith("/") ? "_self" : "_blank",
         },
         type: "link",
       });
@@ -106,7 +113,82 @@ function normalizeAttributes(
         ? { language }
         : null;
   }
+  if (type === "tableCell" || type === "tableHeader") {
+    const colspan = attributes.colspan ?? 1;
+    const rowspan = attributes.rowspan ?? 1;
+    const colwidth = attributes.colwidth ?? null;
+    if (
+      !Number.isInteger(colspan) ||
+      Number(colspan) < 1 ||
+      Number(colspan) > 20 ||
+      !Number.isInteger(rowspan) ||
+      Number(rowspan) < 1 ||
+      Number(rowspan) > 20 ||
+      (colwidth !== null &&
+        (!Array.isArray(colwidth) ||
+          colwidth.length > 20 ||
+          colwidth.some(
+            (width) =>
+              !Number.isInteger(width) ||
+              Number(width) < 20 ||
+              Number(width) > 2_000,
+          )))
+    ) {
+      return null;
+    }
+    return {
+      colspan: Number(colspan),
+      colwidth: colwidth === null ? null : colwidth.map(Number),
+      rowspan: Number(rowspan),
+    };
+  }
   return {};
+}
+
+function hasValidStructure(node: NoteNode): boolean {
+  const children = node.content ?? [];
+  const childTypes = children.map(({ type }) => type);
+  const everyChildIs = (allowed: readonly string[]) =>
+    childTypes.every((type) => allowed.includes(type));
+  const blocks = [
+    "blockquote",
+    "bulletList",
+    "codeBlock",
+    "heading",
+    "horizontalRule",
+    "orderedList",
+    "paragraph",
+    "table",
+  ];
+
+  if (
+    node.type === "text" ||
+    node.type === "hardBreak" ||
+    node.type === "horizontalRule"
+  ) {
+    return children.length === 0;
+  }
+  if (node.type === "paragraph" || node.type === "heading") {
+    return everyChildIs(["hardBreak", "text"]);
+  }
+  if (node.type === "codeBlock") return everyChildIs(["text"]);
+  if (node.type === "bulletList" || node.type === "orderedList") {
+    return children.length > 0 && everyChildIs(["listItem"]);
+  }
+  if (node.type === "listItem" || node.type === "blockquote") {
+    return children.length > 0 && everyChildIs(blocks);
+  }
+  if (node.type === "table") {
+    return children.length > 0 && everyChildIs(["tableRow"]);
+  }
+  if (node.type === "tableRow") {
+    return children.length > 0 && everyChildIs(["tableCell", "tableHeader"]);
+  }
+  if (node.type === "tableCell" || node.type === "tableHeader") {
+    return children.length > 0 && everyChildIs(blocks);
+  }
+  if (node.type === "doc") return everyChildIs(blocks);
+  return false;
 }
 
 export function safeParseNoteDocument(value: unknown): NoteDocument | null {
@@ -165,11 +247,12 @@ export function safeParseNoteDocument(value: unknown): NoteDocument | null {
       content.push(normalizedChild);
     }
 
-    return {
+    const normalizedNode: NoteNode = {
       ...(Object.keys(attrs).length ? { attrs } : {}),
       ...(content.length ? { content } : {}),
       type,
     };
+    return hasValidStructure(normalizedNode) ? normalizedNode : null;
   }
 
   const document = visit(candidate, 0);
