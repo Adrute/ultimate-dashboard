@@ -10,6 +10,8 @@
 - Creación de una tarea raíz o de una subtarea desde cualquier nodo.
 - Completar, reabrir y eliminar tareas respetando permisos del espacio.
 - Navegación inferior móvil y capa visual compacta alineada con la referencia aprobada.
+- Navegación autenticada sin duplicar `Inicio` y `Panel`; el menú inferior solo se muestra en móvil.
+- Creación de proyectos en un panel desplegable para mantener visible la vista general.
 
 No se añadieron dependencias, integraciones externas ni credenciales. La edición avanzada de los campos de una tarea, el orden manual y el arrastre entre niveles permanecen fuera de este vertical.
 
@@ -22,3 +24,7 @@ La migración `20261009013000_enforce_task_project_hierarchy.sql` endurece el tr
 ## Comportamiento de borrado
 
 La relación existente usa `ON DELETE SET NULL`. Al eliminar una tarea, sus subtareas no se borran: pasan al nivel raíz del mismo proyecto. La confirmación de la UI hace explícito este efecto.
+
+## Verificación visual
+
+La vista de proyectos se comprobó con Chrome a 1440 × 1000 y 390 × 844 píxeles. En escritorio, la navegación móvil y la tarjeta de espacio permanecen ocultas; en móvil, la barra inferior presenta cinco columnas sin desbordamiento. El panel de creación tampoco produce desbordamiento horizontal.

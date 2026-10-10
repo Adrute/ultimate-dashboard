@@ -76,12 +76,13 @@ export function AppShell({
           <details className="mobile-menu">
             <summary>
               <MenuIcon />
-              <span>Menú</span>
+              <span>{accountMenu ? "Cuenta" : "Menú"}</span>
             </summary>
             <div className="mobile-menu-panel">
-              <PrimaryNavigation activeHref={activeHref} compact />
-              {accountMenu && (
+              {accountMenu ? (
                 <div className="mobile-account-menu">{accountMenu}</div>
+              ) : (
+                <PrimaryNavigation activeHref={activeHref} compact />
               )}
             </div>
           </details>
@@ -89,9 +90,11 @@ export function AppShell({
 
         {children}
 
-        <div className="mobile-bottom-navigation">
-          <PrimaryNavigation activeHref={activeHref} compact />
-        </div>
+        {accountMenu && (
+          <div className="mobile-bottom-navigation" style={{ display: "none" }}>
+            <PrimaryNavigation activeHref={activeHref} compact />
+          </div>
+        )}
       </div>
     </div>
   );

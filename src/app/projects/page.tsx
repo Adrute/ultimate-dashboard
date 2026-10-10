@@ -110,13 +110,44 @@ export default async function ProjectsPage({
   );
   return (
     <main className="page-shell projects-page" id="main-content" tabIndex={-1}>
-      <header className="page-heading projects-heading">
-        <p className="eyebrow">Productividad</p>
-        <h1>Proyectos con rumbo.</h1>
-        <p className="page-introduction">
-          Define el objetivo, las fechas y el avance sin añadir complejidad
-          innecesaria.
-        </p>
+      <header className="projects-topbar">
+        <div className="page-heading projects-heading">
+          <p className="eyebrow">Productividad</p>
+          <h1>Proyectos</h1>
+          <p className="page-introduction">
+            Objetivos, tareas y progreso en un solo lugar.
+          </p>
+        </div>
+        {editableSpaces.length ? (
+          <details className="project-create-panel">
+            <summary>＋ Nuevo proyecto</summary>
+            <div className="project-create-content">
+              <div>
+                <p className="eyebrow">Nuevo proyecto</p>
+                <h2 id="new-project-title">Traza el camino</h2>
+                <p>Empieza por el objetivo; después podrás organizar tareas.</p>
+              </div>
+              <form action={createProject} className="project-form">
+                {fields()}
+                <label>
+                  Espacio
+                  <select defaultValue={editableSpaces[0]?.id} name="spaceId">
+                    {editableSpaces.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button className="button-primary" type="submit">
+                  Crear proyecto
+                </button>
+              </form>
+            </div>
+          </details>
+        ) : (
+          <p className="projects-no-edit">Sin espacios editables</p>
+        )}
       </header>
       {feedback && (
         <p
@@ -127,33 +158,6 @@ export default async function ProjectsPage({
           {feedback.message}
         </p>
       )}
-      <section className="project-composer" aria-labelledby="new-project-title">
-        <div>
-          <p className="eyebrow">Nuevo proyecto</p>
-          <h2 id="new-project-title">Traza el camino</h2>
-          <p>Etapas e hitos llegarán en una vertical posterior.</p>
-        </div>
-        {editableSpaces.length ? (
-          <form action={createProject} className="project-form">
-            {fields()}
-            <label>
-              Espacio
-              <select defaultValue={editableSpaces[0]?.id} name="spaceId">
-                {editableSpaces.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button className="button-primary" type="submit">
-              Crear proyecto
-            </button>
-          </form>
-        ) : (
-          <p>No tienes espacios editables.</p>
-        )}
-      </section>
       <section
         className="projects-list-section"
         aria-labelledby="projects-list-title"
@@ -169,7 +173,7 @@ export default async function ProjectsPage({
           <div className="task-empty-state">
             <span aria-hidden="true">◇</span>
             <h3>Aún no hay proyectos</h3>
-            <p>Crea el primero con el formulario anterior.</p>
+            <p>Crea el primero con «Nuevo proyecto».</p>
           </div>
         ) : (
           <div className="projects-grid">

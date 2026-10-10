@@ -1826,7 +1826,7 @@ a {
     position: fixed;
     z-index: 18;
     inset: auto 0 0;
-    display: block;
+    display: block !important;
     padding: 0.4rem max(0.35rem, env(safe-area-inset-right))
       calc(0.4rem + env(safe-area-inset-bottom))
       max(0.35rem, env(safe-area-inset-left));
@@ -1837,7 +1837,7 @@ a {
 
   .mobile-bottom-navigation .primary-navigation ul {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.1rem;
     margin: 0;
   }
@@ -1889,6 +1889,75 @@ a {
 .projects-page {
   width: min(100%, 88rem);
 }
+
+.projects-topbar {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.projects-topbar .page-introduction {
+  margin-bottom: 0;
+}
+
+.project-create-panel {
+  flex: 0 0 auto;
+}
+
+.project-create-panel > summary {
+  cursor: pointer;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-size: 0.82rem;
+  font-weight: 800;
+  list-style: none;
+}
+
+.project-create-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.project-create-panel[open] > summary {
+  background: var(--accent-strong);
+}
+
+.project-create-content {
+  position: absolute;
+  z-index: 12;
+  top: calc(100% + var(--space-3));
+  right: 0;
+  display: grid;
+  width: min(44rem, calc(100vw - var(--sidebar-width) - 3rem));
+  max-height: calc(100dvh - 8rem);
+  grid-template-columns: minmax(10rem, 0.55fr) minmax(20rem, 1.45fr);
+  gap: var(--space-5);
+  padding: var(--space-5);
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: 0 1.25rem 3.5rem rgb(28 45 78 / 18%);
+}
+
+.project-create-content h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  letter-spacing: -0.04em;
+}
+
+.project-create-content > div > p:last-child,
+.projects-no-edit {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
 .projects-heading h1 {
   max-width: 12ch;
 }
@@ -1927,6 +1996,7 @@ a {
 .project-form textarea,
 .project-form select {
   width: 100%;
+  min-width: 0;
   min-height: 2.75rem;
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border-strong);
@@ -1940,7 +2010,7 @@ a {
 }
 .project-form-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
 }
 .project-form .button-primary {
@@ -1948,11 +2018,16 @@ a {
   margin-top: var(--space-2);
 }
 .projects-list-section {
-  margin-top: clamp(3rem, 7vw, 5rem);
+  margin-top: var(--space-5);
+}
+
+.projects-list-section .task-empty-state {
+  min-height: 14rem;
+  background: color-mix(in srgb, var(--surface-raised) 72%, transparent);
 }
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
   gap: var(--space-4);
   margin-top: var(--space-5);
 }
@@ -2026,20 +2101,42 @@ a {
 .project-delete-form .button-danger {
   color: var(--danger);
 }
-@media (max-width: 70rem) {
-  .project-form-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 @media (max-width: 64rem) {
   .project-composer {
     grid-template-columns: 1fr;
+  }
+
+  .project-create-content {
+    grid-template-columns: 1fr;
+    width: min(34rem, calc(100vw - var(--sidebar-width) - 3rem));
   }
 }
 @media (max-width: 42rem) {
   .projects-grid,
   .project-form-row {
     grid-template-columns: 1fr;
+  }
+
+  .projects-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .project-create-panel {
+    width: 100%;
+  }
+
+  .project-create-panel > summary {
+    text-align: center;
+  }
+
+  .project-create-content {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-top: var(--space-3);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-soft);
   }
 }
 
