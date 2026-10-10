@@ -2,7 +2,7 @@
 
 **Verificado:** 10 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-05
+**Ámbito:** sesiones de Codex usadas hasta F2-06
 
 ## Capacidades observadas
 
@@ -69,3 +69,7 @@ La sesión volvió a declarar los mismos modelos delegables. F2-04 afecta integr
 ## Aplicación en F2-05
 
 La sesión volvió a declarar los mismos modelos delegables. F2-05 incorpora jerarquía recursiva, snapshots inmutables, restauración y RLS, por lo que se ejecutó secuencialmente con razonamiento alto y sin dependencias nuevas. El identificador exacto, nivel de razonamiento y coste del orquestador activo siguen sin estar expuestos por el entorno.
+
+## Aplicación en F2-06
+
+La sesión volvió a declarar los mismos modelos delegables y no expuso el identificador exacto del orquestador. F2-06 afecta contenido persistido, renderizado de texto enriquecido y superficie XSS, por lo que se ejecutó secuencialmente con razonamiento alto. Se verificó la compatibilidad declarada de Tiptap 3.31.4 con React 19 y la configuración SSR recomendada para Next.js antes de fijar las dependencias.

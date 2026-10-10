@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { createNoteSchema, updateNoteSchema } from "./note-input";
+import {
+  createNoteSchema,
+  updateNoteSchema,
+  updateRichNoteSchema,
+} from "./note-input";
 
 const noteId = "11111111-1111-4111-8111-111111111111";
 const spaceId = "22222222-2222-4222-8222-222222222222";
@@ -23,6 +27,23 @@ describe("note input", () => {
       updateNoteSchema.safeParse({ body: "Texto", noteId, title: "Nota" })
         .success,
     ).toBe(true);
+  });
+
+  it("limits serialized rich content at the input boundary", () => {
+    expect(
+      updateRichNoteSchema.safeParse({
+        content: '{"type":"doc"}',
+        noteId,
+        title: "Nota",
+      }).success,
+    ).toBe(true);
+    expect(
+      updateRichNoteSchema.safeParse({
+        content: "a".repeat(200001),
+        noteId,
+        title: "Nota",
+      }).success,
+    ).toBe(false);
   });
 
   it("rejects invalid identifiers and oversized content", () => {

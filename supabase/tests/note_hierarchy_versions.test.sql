@@ -1,9 +1,11 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(18);
+select plan(22);
 
 select has_column('public','notes','parent_note_id','notes support child pages');
 select has_table('public','note_versions','note versions table exists');
+select has_column('public','notes','content','notes store structured content');
+select has_column('public','note_versions','content','versions preserve structured content');
 select is((select relrowsecurity from pg_class where oid='public.note_versions'::regclass),true,'note versions use RLS');
 
 insert into auth.users(id,instance_id,aud,role,email,encrypted_password,created_at,updated_at) values
@@ -21,6 +23,8 @@ select is((select parent_note_id from public.note_versions where note_id='f22000
 select lives_ok($$update public.notes set body='Revised' where id='f2100000-0000-4000-8000-000000000001'$$,'owner updates note');
 select is((select count(*) from public.note_versions where note_id='f2100000-0000-4000-8000-000000000001'),2::bigint,'update captures another version');
 select is((select body from public.note_versions where note_id='f2100000-0000-4000-8000-000000000001' order by version_number desc limit 1),'Revised','latest version has revised body');
+select lives_ok($$update public.notes set body='Formatted',content='{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Formatted","marks":[{"type":"bold"}]}]}]}'::jsonb where id='f2100000-0000-4000-8000-000000000001'$$,'owner stores structured content');
+select is((select content #>> '{content,0,content,0,marks,0,type}' from public.note_versions where note_id='f2100000-0000-4000-8000-000000000001' order by version_number desc limit 1),'bold','latest version preserves formatting');
 select throws_ok($$update public.notes set parent_note_id=id where id='f2100000-0000-4000-8000-000000000001'$$,'23514',null,'self parenting is rejected');
 select throws_ok($$update public.notes set parent_note_id='f2200000-0000-4000-8000-000000000002' where id='f2100000-0000-4000-8000-000000000001'$$,'23514',null,'cycles are rejected');
 

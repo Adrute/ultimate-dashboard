@@ -5,9 +5,14 @@ import { redirect } from "next/navigation";
 
 import { requireAuthenticatedUser } from "@/lib/auth/session";
 import {
+  noteDocumentToPlainText,
+  plainTextToNoteDocument,
+  safeParseNoteDocument,
+} from "@/lib/notes/note-content";
+import {
   createNoteSchema,
   restoreNoteVersionSchema,
-  updateNoteSchema,
+  updateRichNoteSchema,
 } from "@/lib/notes/note-input";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -33,6 +38,7 @@ export async function createChildNote(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.from("notes").insert({
     body: input.data.body,
+    content: plainTextToNoteDocument(input.data.body),
     created_by: user.id,
     parent_note_id: input.data.parentNoteId,
     space_id: input.data.spaceId,
@@ -50,18 +56,27 @@ export async function createChildNote(formData: FormData) {
 
 export async function updateDetailedNote(formData: FormData) {
   await requireAuthenticatedUser();
-  const input = updateNoteSchema.safeParse({
-    body: value(formData, "body"),
+  const input = updateRichNoteSchema.safeParse({
+    content: value(formData, "content"),
     noteId: value(formData, "noteId"),
     title: value(formData, "title"),
   });
 
   if (!input.success) redirect("/notes?error=invalid_input");
 
+  const content = safeParseNoteDocument(input.data.content);
+  if (!content) {
+    redirect(notePath(input.data.noteId, "error", "update_failed"));
+  }
+
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("notes")
-    .update({ body: input.data.body, title: input.data.title })
+    .update({
+      body: noteDocumentToPlainText(content),
+      content,
+      title: input.data.title,
+    })
     .eq("id", input.data.noteId)
     .select("id")
     .maybeSingle();
@@ -87,7 +102,7 @@ export async function restoreNoteVersion(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const { data: version, error: versionError } = await supabase
     .from("note_versions")
-    .select("body,note_id,parent_note_id,space_id,title")
+    .select("content,note_id,parent_note_id,space_id,title")
     .eq("id", input.data.versionId)
     .eq("note_id", input.data.noteId)
     .maybeSingle();
@@ -96,10 +111,16 @@ export async function restoreNoteVersion(formData: FormData) {
     redirect(notePath(input.data.noteId, "error", "restore_failed"));
   }
 
+  const content = safeParseNoteDocument(version.content);
+  if (!content) {
+    redirect(notePath(input.data.noteId, "error", "restore_failed"));
+  }
+
   const { data: note, error: updateError } = await supabase
     .from("notes")
     .update({
-      body: version.body,
+      body: noteDocumentToPlainText(content),
+      content,
       parent_note_id: version.parent_note_id,
       title: version.title,
     })

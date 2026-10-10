@@ -77,6 +77,7 @@ export type Database = {
       notes: {
         Row: {
           body: string;
+          content: Json;
           created_at: string;
           created_by: string | null;
           id: string;
@@ -87,6 +88,7 @@ export type Database = {
         };
         Insert: {
           body?: string;
+          content?: Json;
           created_at?: string;
           created_by: string;
           id?: string;
@@ -97,6 +99,7 @@ export type Database = {
         };
         Update: {
           body?: string;
+          content?: Json;
           parent_note_id?: string | null;
           title?: string;
         };
@@ -113,6 +116,7 @@ export type Database = {
       note_versions: {
         Row: {
           body: string;
+          content: Json;
           created_at: string;
           created_by: string | null;
           id: string;
@@ -124,6 +128,7 @@ export type Database = {
         };
         Insert: {
           body: string;
+          content?: Json;
           created_at?: string;
           created_by?: string | null;
           id?: string;

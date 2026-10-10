@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireAuthenticatedUser } from "@/lib/auth/session";
+import { plainTextToNoteDocument } from "@/lib/notes/note-content";
 import {
   createNoteSchema,
   deleteNoteSchema,
@@ -28,6 +29,7 @@ export async function createNote(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.from("notes").insert({
     body: input.data.body,
+    content: plainTextToNoteDocument(input.data.body),
     created_by: user.id,
     parent_note_id: input.data.parentNoteId,
     space_id: input.data.spaceId,

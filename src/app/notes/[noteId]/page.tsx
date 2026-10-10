@@ -3,15 +3,16 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import { ConfirmSubmitButton } from "@/components/forms/confirm-submit-button";
+import { RichNoteEditor } from "@/components/notes/rich-note-editor";
 import { requireAuthenticatedUser } from "@/lib/auth/session";
+import {
+  plainTextToNoteDocument,
+  safeParseNoteDocument,
+} from "@/lib/notes/note-content";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 import { deleteNote } from "../actions";
-import {
-  createChildNote,
-  restoreNoteVersion,
-  updateDetailedNote,
-} from "./actions";
+import { createChildNote, restoreNoteVersion } from "./actions";
 
 type NoteDetailPageProps = Readonly<{
   params: Promise<{ noteId: string }>;
@@ -40,7 +41,7 @@ export default async function NoteDetailPage({
   const supabase = await createSupabaseServerClient();
   const { data: note, error: noteError } = await supabase
     .from("notes")
-    .select("body,id,parent_note_id,space_id,title,updated_at")
+    .select("body,content,id,parent_note_id,space_id,title,updated_at")
     .eq("id", noteId)
     .maybeSingle();
 
@@ -105,6 +106,8 @@ export default async function NoteDetailPage({
   const feedbackCode = feedbackParams.error ?? feedbackParams.message;
   const feedback =
     feedbackMessages[feedbackCode as keyof typeof feedbackMessages];
+  const content =
+    safeParseNoteDocument(note.content) ?? plainTextToNoteDocument(note.body);
 
   return (
     <main
@@ -136,45 +139,12 @@ export default async function NoteDetailPage({
       <div className="note-workspace">
         <article className="note-editor-card">
           <p className="eyebrow">{space.name}</p>
-          {canEdit ? (
-            <form action={updateDetailedNote} className="note-detail-form">
-              <input name="noteId" type="hidden" value={note.id} />
-              <label className="sr-only" htmlFor="detail-note-title">
-                Título
-              </label>
-              <input
-                className="note-title-input"
-                defaultValue={note.title}
-                id="detail-note-title"
-                maxLength={160}
-                name="title"
-                required
-              />
-              <label className="sr-only" htmlFor="detail-note-body">
-                Contenido
-              </label>
-              <textarea
-                className="note-body-input"
-                defaultValue={note.body}
-                id="detail-note-body"
-                maxLength={50000}
-                name="body"
-                placeholder="Empieza a escribir…"
-                rows={18}
-              />
-              <div className="note-editor-footer">
-                <span>Texto plano · historial automático</span>
-                <button className="button-primary" type="submit">
-                  Guardar cambios
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="note-readonly-content">
-              <h1>{note.title}</h1>
-              <p>{note.body || "Nota vacía"}</p>
-            </div>
-          )}
+          <RichNoteEditor
+            canEdit={canEdit}
+            content={content}
+            noteId={note.id}
+            title={note.title}
+          />
         </article>
 
         <aside className="note-context-panel">
