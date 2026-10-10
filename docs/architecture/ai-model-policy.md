@@ -1,8 +1,8 @@
 # Política de modelos de IA
 
-**Verificado:** 9 de octubre de 2026
+**Verificado:** 10 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-04
+**Ámbito:** sesiones de Codex usadas hasta F2-05
 
 ## Capacidades observadas
 
@@ -65,3 +65,7 @@ La disponibilidad declarada no cambió. F2-03 combina integridad jerárquica, RL
 ## Aplicación en F2-04
 
 La sesión volvió a declarar los mismos modelos delegables. F2-04 afecta integridad relacional, acciones de servidor y UI recursiva, por lo que se ejecutó secuencialmente con razonamiento alto y sin dependencias nuevas. El identificador exacto, nivel de razonamiento y coste del orquestador activo siguen sin estar expuestos por el entorno.
+
+## Aplicación en F2-05
+
+La sesión volvió a declarar los mismos modelos delegables. F2-05 incorpora jerarquía recursiva, snapshots inmutables, restauración y RLS, por lo que se ejecutó secuencialmente con razonamiento alto y sin dependencias nuevas. El identificador exacto, nivel de razonamiento y coste del orquestador activo siguen sin estar expuestos por el entorno.

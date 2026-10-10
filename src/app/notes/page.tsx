@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { z } from "zod";
 
-import { ConfirmSubmitButton } from "@/components/forms/confirm-submit-button";
 import { requireAuthenticatedUser } from "@/lib/auth/session";
+import { buildNoteTree, type NoteTreeNode } from "@/lib/notes/note-tree";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import { createNote, deleteNote, updateNote } from "./actions";
+import { createNote } from "./actions";
 import { getNoteFeedback } from "./feedback";
 
 export const metadata = { title: "Notas" };
@@ -12,6 +13,62 @@ export const metadata = { title: "Notas" };
 type NotesPageProps = Readonly<{
   searchParams: Promise<{ error?: string; message?: string; space?: string }>;
 }>;
+
+type NoteSummary = Readonly<{
+  body: string;
+  id: string;
+  parent_note_id: string | null;
+  space_id: string;
+  title: string;
+  updated_at: string;
+}>;
+
+function NoteBranch({
+  editableIds,
+  node,
+  spaceNames,
+}: Readonly<{
+  editableIds: ReadonlySet<string>;
+  node: NoteTreeNode<NoteSummary>;
+  spaceNames: ReadonlyMap<string, string>;
+}>) {
+  return (
+    <li>
+      <article className="note-card">
+        <div className="note-card-copy">
+          <span>{spaceNames.get(node.space_id) ?? "Espacio"}</span>
+          <h3>
+            <Link href={`/notes/${node.id}`}>{node.title}</Link>
+          </h3>
+          <p className="note-preview">{node.body || "Nota vacía"}</p>
+        </div>
+        <div className="note-card-meta">
+          <time dateTime={node.updated_at}>
+            {new Intl.DateTimeFormat("es-ES", {
+              dateStyle: "medium",
+            }).format(new Date(node.updated_at))}
+          </time>
+          <Link className="note-open-link" href={`/notes/${node.id}`}>
+            {editableIds.has(node.space_id) ? "Abrir y editar" : "Abrir"}
+            <span aria-hidden="true"> →</span>
+          </Link>
+        </div>
+      </article>
+      {node.children.length > 0 && (
+        <ul className="note-tree is-nested">
+          {node.children.map((child) => (
+            <NoteBranch
+              editableIds={editableIds}
+              key={child.id}
+              node={child}
+              spaceNames={spaceNames}
+            />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
 
 export default async function NotesPage({ searchParams }: NotesPageProps) {
   const user = await requireAuthenticatedUser();
@@ -54,22 +111,64 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
 
   let notesQuery = supabase
     .from("notes")
-    .select("body, id, space_id, title, updated_at")
+    .select("body, id, parent_note_id, space_id, title, updated_at")
     .order("updated_at", { ascending: false });
   if (activeSpace) notesQuery = notesQuery.eq("space_id", activeSpace);
   const notesResult = await notesQuery;
   if (notesResult.error) throw new Error("No se pudieron cargar las notas.");
 
+  const noteTree = buildNoteTree(notesResult.data);
+
   return (
     <main className="page-shell notes-page" id="main-content" tabIndex={-1}>
-      <header className="page-heading notes-heading">
-        <p className="eyebrow">Productividad</p>
-        <h1>Ideas que no se pierden.</h1>
-        <p className="page-introduction">
-          Guarda notas sencillas en tus espacios. El contenido es texto plano y
-          seguro.
-        </p>
-      </header>
+      <div className="notes-topbar">
+        <header className="page-heading notes-heading">
+          <p className="eyebrow">Biblioteca</p>
+          <h1>Tus notas</h1>
+          <p className="page-introduction">
+            Organiza ideas en páginas y subpáginas. Cada cambio queda guardado
+            en el historial.
+          </p>
+        </header>
+
+        {editableSpaces.length > 0 && (
+          <details className="note-create-panel">
+            <summary>＋ Nueva nota</summary>
+            <form action={createNote} className="note-form note-create-content">
+              <input name="parentNoteId" type="hidden" value="" />
+              <label htmlFor="note-title">Título</label>
+              <input
+                autoComplete="off"
+                id="note-title"
+                maxLength={160}
+                name="title"
+                required
+              />
+              <label htmlFor="note-body">Contenido</label>
+              <textarea id="note-body" maxLength={50000} name="body" rows={6} />
+              <label htmlFor="note-space">Espacio</label>
+              <select
+                defaultValue={
+                  activeSpace && editableIds.has(activeSpace)
+                    ? activeSpace
+                    : editableSpaces[0]?.id
+                }
+                id="note-space"
+                name="spaceId"
+              >
+                {editableSpaces.map((space) => (
+                  <option key={space.id} value={space.id}>
+                    {space.name}
+                  </option>
+                ))}
+              </select>
+              <button className="button-primary" type="submit">
+                Crear nota
+              </button>
+            </form>
+          </details>
+        )}
+      </div>
 
       {feedback && (
         <p
@@ -81,51 +180,14 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
         </p>
       )}
 
-      <section aria-labelledby="new-note-title" className="note-composer">
-        <div>
-          <p className="eyebrow">Nueva nota</p>
-          <h2 id="new-note-title">Empieza a escribir</h2>
-          <p>Podrás enriquecerla con bloques en una entrega posterior.</p>
-        </div>
-        {editableSpaces.length > 0 ? (
-          <form action={createNote} className="note-form">
-            <label htmlFor="note-title">Título</label>
-            <input id="note-title" maxLength={160} name="title" required />
-            <label htmlFor="note-body">Contenido</label>
-            <textarea id="note-body" maxLength={50000} name="body" rows={7} />
-            <label htmlFor="note-space">Espacio</label>
-            <select
-              defaultValue={
-                activeSpace && editableIds.has(activeSpace)
-                  ? activeSpace
-                  : editableSpaces[0]?.id
-              }
-              id="note-space"
-              name="spaceId"
-            >
-              {editableSpaces.map((space) => (
-                <option key={space.id} value={space.id}>
-                  {space.name}
-                </option>
-              ))}
-            </select>
-            <button className="button-primary" type="submit">
-              Crear nota
-            </button>
-          </form>
-        ) : (
-          <p>No tienes espacios con permiso de edición.</p>
-        )}
-      </section>
-
       <section
         aria-labelledby="notes-list-title"
         className="notes-list-section"
       >
         <div className="task-list-heading">
           <div>
-            <p className="eyebrow">Biblioteca</p>
-            <h2 id="notes-list-title">Tus notas</h2>
+            <p className="eyebrow">Vista general</p>
+            <h2 id="notes-list-title">Páginas</h2>
           </div>
           <span
             aria-label={`${notesResult.data.length} notas`}
@@ -155,71 +217,19 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
           <div className="task-empty-state">
             <span aria-hidden="true">✎</span>
             <h3>Aún no hay notas</h3>
-            <p>Crea la primera nota en el formulario anterior.</p>
+            <p>Crea la primera página con el botón Nueva nota.</p>
           </div>
         ) : (
-          <div className="notes-grid">
-            {notesResult.data.map((note) => {
-              const canEdit = editableIds.has(note.space_id);
-              return (
-                <article className="note-card" key={note.id}>
-                  <span>{spaceNames.get(note.space_id) ?? "Espacio"}</span>
-                  <h3>{note.title}</h3>
-                  <p className="note-preview">{note.body || "Nota vacía"}</p>
-                  <time dateTime={note.updated_at}>
-                    Actualizada{" "}
-                    {new Intl.DateTimeFormat("es-ES", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    }).format(new Date(note.updated_at))}
-                  </time>
-                  {canEdit && (
-                    <details>
-                      <summary>Editar nota</summary>
-                      <form
-                        action={updateNote}
-                        className="note-form is-compact"
-                      >
-                        <input name="noteId" type="hidden" value={note.id} />
-                        <label>
-                          Título
-                          <input
-                            defaultValue={note.title}
-                            maxLength={160}
-                            name="title"
-                            required
-                          />
-                        </label>
-                        <label>
-                          Contenido
-                          <textarea
-                            defaultValue={note.body}
-                            maxLength={50000}
-                            name="body"
-                            rows={8}
-                          />
-                        </label>
-                        <div className="note-actions">
-                          <button className="button-primary" type="submit">
-                            Guardar
-                          </button>
-                        </div>
-                      </form>
-                      <form action={deleteNote} className="note-delete-form">
-                        <input name="noteId" type="hidden" value={note.id} />
-                        <ConfirmSubmitButton
-                          className="button-danger"
-                          confirmation={`¿Eliminar “${note.title}”?`}
-                        >
-                          Eliminar nota
-                        </ConfirmSubmitButton>
-                      </form>
-                    </details>
-                  )}
-                </article>
-              );
-            })}
-          </div>
+          <ul className="note-tree">
+            {noteTree.map((node) => (
+              <NoteBranch
+                editableIds={editableIds}
+                key={node.id}
+                node={node}
+                spaceNames={spaceNames}
+              />
+            ))}
+          </ul>
         )}
       </section>
     </main>

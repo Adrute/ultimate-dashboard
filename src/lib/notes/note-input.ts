@@ -7,6 +7,10 @@ const noteFields = {
 
 export const createNoteSchema = z.object({
   ...noteFields,
+  parentNoteId: z
+    .union([z.uuid(), z.literal("")])
+    .nullish()
+    .transform((value) => value || null),
   spaceId: z.uuid(),
 });
 
@@ -16,3 +20,8 @@ export const updateNoteSchema = z.object({
 });
 
 export const deleteNoteSchema = z.object({ noteId: z.uuid() });
+
+export const restoreNoteVersionSchema = z.object({
+  noteId: z.uuid(),
+  versionId: z.uuid(),
+});

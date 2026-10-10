@@ -15,6 +15,7 @@ describe("note input", () => {
 
     expect(result.title).toBe("Ideas");
     expect(result.body).toBe("Primera línea\n  segunda línea");
+    expect(result.parentNoteId).toBeNull();
   });
 
   it("accepts a valid update", () => {
@@ -30,6 +31,25 @@ describe("note input", () => {
         body: "a".repeat(50001),
         spaceId: "invalid",
         title: " ",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("accepts a parent page and rejects an invalid one", () => {
+    expect(
+      createNoteSchema.safeParse({
+        body: "",
+        parentNoteId: noteId,
+        spaceId,
+        title: "Subpágina",
+      }).success,
+    ).toBe(true);
+    expect(
+      createNoteSchema.safeParse({
+        body: "",
+        parentNoteId: "invalid",
+        spaceId,
+        title: "Subpágina",
       }).success,
     ).toBe(false);
   });

@@ -25,6 +25,7 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 - F2-02 implementado: proyectos básicos con estado, progreso, fechas y RLS.
 - F2-03 implementado: tareas relacionadas, subtareas seguras y reajuste visual inicial.
 - F2-04 implementado: vista de proyecto con árbol recursivo de tareas, integridad entre proyectos y navegación móvil inferior.
+- F2-05 implementado: notas jerárquicas con subpáginas, historial automático y restauración segura.
 
 No hay servicios externos configurados.
 

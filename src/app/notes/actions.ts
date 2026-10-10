@@ -19,6 +19,7 @@ export async function createNote(formData: FormData) {
   const user = await requireAuthenticatedUser();
   const input = createNoteSchema.safeParse({
     body: value(formData, "body"),
+    parentNoteId: value(formData, "parentNoteId"),
     spaceId: value(formData, "spaceId"),
     title: value(formData, "title"),
   });
@@ -28,6 +29,7 @@ export async function createNote(formData: FormData) {
   const { error } = await supabase.from("notes").insert({
     body: input.data.body,
     created_by: user.id,
+    parent_note_id: input.data.parentNoteId,
     space_id: input.data.spaceId,
     title: input.data.title,
   });

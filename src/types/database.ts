@@ -80,6 +80,7 @@ export type Database = {
           created_at: string;
           created_by: string | null;
           id: string;
+          parent_note_id: string | null;
           space_id: string;
           title: string;
           updated_at: string;
@@ -89,17 +90,60 @@ export type Database = {
           created_at?: string;
           created_by: string;
           id?: string;
+          parent_note_id?: string | null;
           space_id: string;
           title: string;
           updated_at?: string;
         };
         Update: {
           body?: string;
+          parent_note_id?: string | null;
           title?: string;
         };
         Relationships: [
           {
             foreignKeyName: "notes_space_id_fkey";
+            columns: ["space_id"];
+            isOneToOne: false;
+            referencedRelation: "spaces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      note_versions: {
+        Row: {
+          body: string;
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          note_id: string;
+          parent_note_id: string | null;
+          space_id: string;
+          title: string;
+          version_number: number;
+        };
+        Insert: {
+          body: string;
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          note_id: string;
+          parent_note_id?: string | null;
+          space_id: string;
+          title: string;
+          version_number: number;
+        };
+        Update: Record<never, never>;
+        Relationships: [
+          {
+            foreignKeyName: "note_versions_note_id_fkey";
+            columns: ["note_id"];
+            isOneToOne: false;
+            referencedRelation: "notes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "note_versions_space_id_fkey";
             columns: ["space_id"];
             isOneToOne: false;
             referencedRelation: "spaces";
