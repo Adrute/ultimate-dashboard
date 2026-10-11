@@ -1,7 +1,18 @@
-# Búsqueda inicial (F1-02)
+# Búsqueda global (F1-02, ampliada en F2-09)
 
-La búsqueda global comienza con el único contenido funcional disponible: tareas. Consulta título y descripción sin distinguir mayúsculas, con una entrada de 1 a 80 caracteres. Salud y cualquier módulo futuro quedan fuera hasta definir explícitamente su participación; los datos de salud nunca se incorporarán.
+La búsqueda global consulta tareas y notas autorizadas sin distinguir mayúsculas,
+con una entrada de 1 a 80 caracteres. En tareas busca título y descripción; en
+notas, título y la representación de texto plano derivada del documento
+estructurado. Salud y cualquier módulo futuro quedan fuera hasta definir
+explícitamente su participación; los datos de salud nunca se incorporarán.
 
-`public.search_tasks` usa `security invoker`, por lo que se ejecuta con el rol del usuario y conserva las políticas RLS de `tasks`. La función no agrega permisos ni utiliza claves privilegiadas. Las pruebas pgTAP verifican que una coincidencia de otro usuario y otro espacio no aparece.
+`public.search_tasks` y `public.search_notes` usan `security invoker`, por lo
+que se ejecutan con el rol del usuario y conservan las políticas RLS de sus
+tablas. Las funciones no agregan permisos ni utilizan claves privilegiadas.
+Las pruebas pgTAP verifican coincidencias positivas y negativas entre espacio
+personal, espacio compartido y un usuario externo.
 
-La ruta `/search` es SSR y protegida. Los resultados enlazan a la vista filtrada de tareas. No se añade todavía índice de texto completo: el volumen real debe medirse antes de elegir idioma, normalización o una estrategia de búsqueda más compleja.
+La ruta `/search` es SSR y protegida. Agrupa resultados por tipo; las tareas
+enlazan a su vista filtrada y las notas a su página. No se añade todavía índice
+de texto completo: el volumen real debe medirse antes de elegir idioma,
+normalización o una estrategia más compleja.

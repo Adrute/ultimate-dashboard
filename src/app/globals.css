@@ -2558,9 +2558,27 @@ a {
   text-transform: uppercase;
 }
 
-.search-result-card h3 {
+.search-result-card h3,
+.search-result-card h4 {
   margin: var(--space-2) 0 0;
   overflow-wrap: anywhere;
+}
+
+.search-result-groups {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-5);
+}
+
+.search-result-groups > section > h3 {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.search-result-groups .search-result-list {
+  margin-top: var(--space-3);
 }
 
 .search-result-card p {

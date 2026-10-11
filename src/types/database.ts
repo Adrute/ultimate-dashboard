@@ -414,6 +414,12 @@ export type Database = {
         };
         Returns: Database["public"]["Tables"]["tasks"]["Row"][];
       };
+      search_notes: {
+        Args: {
+          search_query: string;
+        };
+        Returns: Database["public"]["Tables"]["notes"]["Row"][];
+      };
     };
     Enums: {
       dashboard_widget_size: "small" | "medium" | "large";

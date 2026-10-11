@@ -33,23 +33,31 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const spaceNames = new Map(
     spacesResult.data.map((space) => [space.id, space.name]),
   );
-  const searchResult = query
-    ? await supabase.rpc("search_tasks", { search_query: query })
-    : { data: [], error: null };
+  const [taskSearchResult, noteSearchResult] = query
+    ? await Promise.all([
+        supabase.rpc("search_tasks", { search_query: query }),
+        supabase.rpc("search_notes", { search_query: query }),
+      ])
+    : [
+        { data: [], error: null },
+        { data: [], error: null },
+      ];
 
-  if (searchResult.error) {
+  if (taskSearchResult.error || noteSearchResult.error) {
     throw new Error("No se pudo completar la búsqueda.");
   }
 
-  const tasks = searchResult.data;
+  const tasks = taskSearchResult.data;
+  const notes = noteSearchResult.data;
+  const resultCount = tasks.length + notes.length;
 
   return (
     <main className="page-shell search-page" id="main-content" tabIndex={-1}>
       <header className="page-heading search-heading">
-        <p className="eyebrow">Búsqueda inicial</p>
+        <p className="eyebrow">Búsqueda global</p>
         <h1>Encuentra lo importante.</h1>
         <p className="page-introduction">
-          Busca en los títulos y descripciones de las tareas que puedes ver.
+          Busca en las tareas y notas que tienes permiso para ver.
         </p>
       </header>
 
@@ -59,7 +67,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         method="get"
         role="search"
       >
-        <label htmlFor="global-search">Buscar tareas</label>
+        <label htmlFor="global-search">Buscar tareas y notas</label>
         <div>
           <input
             autoComplete="off"
@@ -94,38 +102,65 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               <h2 id="search-results-title">Coincidencias para “{query}”</h2>
             </div>
             <span
-              aria-label={`${tasks.length} resultados`}
+              aria-label={`${resultCount} resultados`}
               className="widget-count"
             >
-              {tasks.length}
+              {resultCount}
             </span>
           </div>
 
-          {tasks.length === 0 ? (
+          {resultCount === 0 ? (
             <div className="task-empty-state">
               <span aria-hidden="true">?</span>
               <h3>No encontramos coincidencias</h3>
-              <p>Prueba con otra palabra o revisa tus tareas.</p>
+              <p>Prueba con otra palabra o revisa tus tareas y notas.</p>
             </div>
           ) : (
-            <div className="search-result-list">
-              {tasks.map((task) => (
-                <article className="search-result-card" key={task.id}>
-                  <div>
-                    <span>
-                      {spaceNames.get(task.space_id) ?? "Espacio"} ·{" "}
-                      {statusLabels[task.status]}
-                    </span>
-                    <h3>{task.title}</h3>
-                    {task.description && <p>{task.description}</p>}
+            <div className="search-result-groups">
+              {tasks.length > 0 && (
+                <section aria-labelledby="task-search-results-title">
+                  <h3 id="task-search-results-title">Tareas</h3>
+                  <div className="search-result-list">
+                    {tasks.map((task) => (
+                      <article className="search-result-card" key={task.id}>
+                        <div>
+                          <span>
+                            {spaceNames.get(task.space_id) ?? "Espacio"} ·{" "}
+                            {statusLabels[task.status]}
+                          </span>
+                          <h4>{task.title}</h4>
+                          {task.description && <p>{task.description}</p>}
+                        </div>
+                        <Link
+                          href={`/tasks?filter=${task.status === "done" ? "done" : "open"}&space=${task.space_id}`}
+                        >
+                          Ver en tareas
+                        </Link>
+                      </article>
+                    ))}
                   </div>
-                  <Link
-                    href={`/tasks?filter=${task.status === "done" ? "done" : "open"}&space=${task.space_id}`}
-                  >
-                    Ver en tareas
-                  </Link>
-                </article>
-              ))}
+                </section>
+              )}
+
+              {notes.length > 0 && (
+                <section aria-labelledby="note-search-results-title">
+                  <h3 id="note-search-results-title">Notas</h3>
+                  <div className="search-result-list">
+                    {notes.map((note) => (
+                      <article className="search-result-card" key={note.id}>
+                        <div>
+                          <span>
+                            {spaceNames.get(note.space_id) ?? "Espacio"} · Nota
+                          </span>
+                          <h4>{note.title}</h4>
+                          {note.body && <p>{note.body.slice(0, 180)}</p>}
+                        </div>
+                        <Link href={`/notes/${note.id}`}>Abrir nota</Link>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
           )}
         </section>

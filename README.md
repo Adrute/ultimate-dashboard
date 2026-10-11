@@ -29,6 +29,7 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 - F2-06 implementado: editor enriquecido estructurado con formato básico, enlaces seguros y versiones completas.
 - F2-07 implementado: tablas editables y enlaces internos entre páginas autorizadas del mismo espacio.
 - F2-08 implementado: imágenes y adjuntos privados en notas, con Storage, límites de archivo y RLS.
+- F2-09 implementado: búsqueda global de tareas y notas autorizadas, con aislamiento por RLS.
 
 No hay servicios externos configurados.
 

@@ -2,7 +2,7 @@
 
 **Verificado:** 12 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-08
+**Ámbito:** sesiones de Codex usadas hasta F2-09
 
 ## Capacidades observadas
 
@@ -81,3 +81,7 @@ La sesión volvió a declarar los mismos modelos delegables y no expuso el ident
 ## Aplicación en F2-08
 
 La sesión volvió a declarar los mismos modelos delegables y no expuso el identificador exacto del orquestador. F2-08 afecta archivos privados, rutas firmadas, RLS en Storage y validación de contenido enriquecido, por lo que se ejecutó secuencialmente con razonamiento alto y sin agentes delegados. Se verificaron en documentación oficial el límite de Server Actions de Next.js 16, las políticas de Supabase Storage y `@tiptap/extension-image` 3.31.4 antes de fijar la dependencia.
+
+## Aplicación en F2-09
+
+La disponibilidad declarada no cambió. F2-09 amplía una consulta SQL sujeta a RLS y la presentación de resultados autorizados, por lo que se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
