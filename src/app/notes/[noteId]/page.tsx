@@ -12,7 +12,12 @@ import {
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 import { deleteNote } from "../actions";
-import { createChildNote, restoreNoteVersion } from "./actions";
+import {
+  createChildNote,
+  deleteNoteAttachment,
+  restoreNoteVersion,
+  uploadNoteAttachment,
+} from "./actions";
 
 type NoteDetailPageProps = Readonly<{
   params: Promise<{ noteId: string }>;
@@ -20,10 +25,20 @@ type NoteDetailPageProps = Readonly<{
 }>;
 
 const feedbackMessages = {
+  attachment_delete_failed: "No se pudo eliminar el adjunto.",
+  attachment_deleted: "Adjunto eliminado.",
+  attachment_failed: "No se pudo subir el adjunto.",
+  attachment_invalid:
+    "El archivo no es válido. Usa PNG, JPEG, WebP, GIF, PDF o TXT de hasta 5 MB.",
+  attachment_in_use:
+    "Quita la imagen del contenido y guarda la nota antes de eliminar su archivo.",
+  attachment_uploaded: "Adjunto privado guardado.",
   child_create_failed: "No se pudo crear la subpágina.",
   child_created: "Subpágina creada.",
   restore_failed:
     "No se pudo restaurar esa versión. Es posible que su página superior ya no exista.",
+  restore_missing_attachment:
+    "No se puede restaurar esa versión porque uno de sus archivos ya fue eliminado.",
   restored: "Versión restaurada y guardada como un cambio nuevo.",
   update_failed: "No se pudo guardar la nota.",
   updated: "Nota guardada.",
@@ -48,36 +63,47 @@ export default async function NoteDetailPage({
   if (noteError) throw new Error("No se pudo cargar la nota.");
   if (!note) notFound();
 
-  const [spaceResult, membershipResult, pagesResult, versionsResult] =
-    await Promise.all([
-      supabase
-        .from("spaces")
-        .select("id,kind,name,owner_user_id")
-        .eq("id", note.space_id)
-        .single(),
-      supabase
-        .from("space_members")
-        .select("role")
-        .eq("space_id", note.space_id)
-        .eq("user_id", user.id)
-        .maybeSingle(),
-      supabase
-        .from("notes")
-        .select("id,parent_note_id,title,updated_at")
-        .eq("space_id", note.space_id)
-        .order("updated_at", { ascending: false }),
-      supabase
-        .from("note_versions")
-        .select("created_at,id,title,version_number")
-        .eq("note_id", note.id)
-        .order("version_number", { ascending: false }),
-    ]);
+  const [
+    spaceResult,
+    membershipResult,
+    pagesResult,
+    versionsResult,
+    attachmentsResult,
+  ] = await Promise.all([
+    supabase
+      .from("spaces")
+      .select("id,kind,name,owner_user_id")
+      .eq("id", note.space_id)
+      .single(),
+    supabase
+      .from("space_members")
+      .select("role")
+      .eq("space_id", note.space_id)
+      .eq("user_id", user.id)
+      .maybeSingle(),
+    supabase
+      .from("notes")
+      .select("id,parent_note_id,title,updated_at")
+      .eq("space_id", note.space_id)
+      .order("updated_at", { ascending: false }),
+    supabase
+      .from("note_versions")
+      .select("created_at,id,title,version_number")
+      .eq("note_id", note.id)
+      .order("version_number", { ascending: false }),
+    supabase
+      .from("attachments")
+      .select("created_at,file_name,id,mime_type,size_bytes")
+      .eq("note_id", note.id)
+      .order("created_at", { ascending: false }),
+  ]);
 
   if (
     spaceResult.error ||
     membershipResult.error ||
     pagesResult.error ||
-    versionsResult.error
+    versionsResult.error ||
+    attachmentsResult.error
   ) {
     throw new Error("No se pudo cargar el contenido de la nota.");
   }
@@ -142,6 +168,9 @@ export default async function NoteDetailPage({
           <RichNoteEditor
             canEdit={canEdit}
             content={content}
+            imageAttachments={attachmentsResult.data
+              .filter(({ mime_type }) => mime_type.startsWith("image/"))
+              .map(({ file_name, id }) => ({ fileName: file_name, id }))}
             noteId={note.id}
             pages={pages
               .filter((page) => page.id !== note.id)
@@ -219,6 +248,67 @@ export default async function NoteDetailPage({
                 </li>
               ))}
             </ol>
+          </section>
+
+          <section aria-labelledby="note-attachments-title">
+            <div className="note-panel-heading">
+              <h2 id="note-attachments-title">Adjuntos</h2>
+              <span>{attachmentsResult.data.length}</span>
+            </div>
+            {attachmentsResult.data.length ? (
+              <ul className="note-attachment-list">
+                {attachmentsResult.data.map((attachment) => (
+                  <li key={attachment.id}>
+                    <div>
+                      <a
+                        href={`/notes/attachments/${attachment.id}?download=1`}
+                      >
+                        {attachment.file_name}
+                      </a>
+                      <span>
+                        {(attachment.size_bytes / 1024).toLocaleString(
+                          "es-ES",
+                          { maximumFractionDigits: 1 },
+                        )}{" "}
+                        KB
+                      </span>
+                    </div>
+                    {canEdit && (
+                      <form action={deleteNoteAttachment}>
+                        <input
+                          name="attachmentId"
+                          type="hidden"
+                          value={attachment.id}
+                        />
+                        <input name="noteId" type="hidden" value={note.id} />
+                        <ConfirmSubmitButton
+                          confirmation={`¿Eliminar el adjunto “${attachment.file_name}”?`}
+                        >
+                          Eliminar
+                        </ConfirmSubmitButton>
+                      </form>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="note-panel-empty">Aún no hay adjuntos.</p>
+            )}
+            {canEdit && (
+              <form action={uploadNoteAttachment} className="note-upload-form">
+                <input name="noteId" type="hidden" value={note.id} />
+                <label htmlFor="note-attachment">Añadir archivo privado</label>
+                <input
+                  accept="image/jpeg,image/png,image/webp,image/gif,application/pdf,text/plain"
+                  id="note-attachment"
+                  name="attachment"
+                  required
+                  type="file"
+                />
+                <small>PNG, JPEG, WebP, GIF, PDF o TXT · máximo 5 MB</small>
+                <button type="submit">Subir adjunto</button>
+              </form>
+            )}
           </section>
 
           {canEdit && (

@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      attachments: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          file_name: string;
+          id: string;
+          mime_type: string;
+          note_id: string;
+          size_bytes: number;
+          space_id: string;
+          storage_path: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by: string;
+          file_name: string;
+          id: string;
+          mime_type: string;
+          note_id: string;
+          size_bytes: number;
+          space_id: string;
+          storage_path: string;
+        };
+        Update: Record<never, never>;
+        Relationships: [
+          {
+            foreignKeyName: "attachments_note_matches_space";
+            columns: ["note_id", "space_id"];
+            isOneToOne: false;
+            referencedRelation: "notes";
+            referencedColumns: ["id", "space_id"];
+          },
+          {
+            foreignKeyName: "attachments_note_id_fkey";
+            columns: ["note_id"];
+            isOneToOne: false;
+            referencedRelation: "notes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "attachments_space_id_fkey";
+            columns: ["space_id"];
+            isOneToOne: false;
+            referencedRelation: "spaces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       dashboard_layouts: {
         Row: {
           created_at: string;

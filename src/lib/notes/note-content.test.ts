@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  noteDocumentAttachmentIds,
   noteDocumentToPlainText,
+  noteDocumentUsesAttachment,
   plainTextToNoteDocument,
   safeParseNoteDocument,
 } from "./note-content";
@@ -132,6 +134,48 @@ describe("note content", () => {
     expect(document?.content?.[0]?.type).toBe("table");
   });
 
+  it("accepts only private internal attachment image routes", () => {
+    const document = safeParseNoteDocument({
+      content: [
+        {
+          attrs: {
+            alt: "Diagrama",
+            src: "/notes/attachments/11111111-1111-4111-8111-111111111111",
+            title: null,
+          },
+          type: "image",
+        },
+      ],
+      type: "doc",
+    });
+
+    expect(document?.content?.[0]?.attrs?.src).toBe(
+      "/notes/attachments/11111111-1111-4111-8111-111111111111",
+    );
+    expect(document && noteDocumentToPlainText(document)).toBe("Diagrama");
+    expect(
+      document &&
+        noteDocumentUsesAttachment(
+          document,
+          "11111111-1111-4111-8111-111111111111",
+        ),
+    ).toBe(true);
+    expect(document && noteDocumentAttachmentIds(document)).toEqual([
+      "11111111-1111-4111-8111-111111111111",
+    ]);
+    expect(
+      safeParseNoteDocument({
+        content: [
+          {
+            attrs: { src: "https://tracker.example/pixel.png" },
+            type: "image",
+          },
+        ],
+        type: "doc",
+      }),
+    ).toBeNull();
+  });
+
   it("rejects executable links and unsupported nodes", () => {
     expect(
       safeParseNoteDocument({
@@ -146,7 +190,7 @@ describe("note content", () => {
       }),
     ).toBeNull();
     expect(
-      safeParseNoteDocument({ content: [{ type: "image" }], type: "doc" }),
+      safeParseNoteDocument({ content: [{ type: "video" }], type: "doc" }),
     ).toBeNull();
     expect(
       safeParseNoteDocument({

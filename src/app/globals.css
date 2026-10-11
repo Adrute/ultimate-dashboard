@@ -1476,6 +1476,121 @@ a {
   }
 }
 
+/* F2-08: private note attachments and embedded images */
+.rich-note-content .note-content-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 42rem;
+  margin-block: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+  object-fit: contain;
+}
+
+.rich-note-content .ProseMirror-selectednode.note-content-image {
+  outline: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  outline-offset: 3px;
+}
+
+.note-attachment-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.note-attachment-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+}
+
+.note-attachment-list li > div {
+  display: grid;
+  min-width: 0;
+}
+
+.note-attachment-list a {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-attachment-list span,
+.note-upload-form small {
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+}
+
+.note-attachment-list form button {
+  min-height: 2rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--danger);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.note-upload-form {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.note-upload-form label {
+  color: var(--text-primary);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.note-upload-form input[type="file"] {
+  width: 100%;
+  min-width: 0;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.note-upload-form input[type="file"]::file-selector-button,
+.note-upload-form button {
+  min-height: 2.2rem;
+  cursor: pointer;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.note-upload-form input[type="file"]::file-selector-button {
+  margin-right: var(--space-2);
+}
+
+.note-upload-form button {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
 /* F2-04: compact UI layer applied after the shared shell and task rules. */
 .sr-only {
   position: absolute;

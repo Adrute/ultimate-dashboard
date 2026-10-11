@@ -1,5 +1,6 @@
 "use client";
 
+import ImageExtension from "@tiptap/extension-image";
 import LinkExtension from "@tiptap/extension-link";
 import { TableKit } from "@tiptap/extension-table";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -14,6 +15,7 @@ import { updateDetailedNote } from "@/app/notes/[noteId]/actions";
 type RichNoteEditorProps = Readonly<{
   canEdit: boolean;
   content: NoteDocument;
+  imageAttachments: ReadonlyArray<Readonly<{ fileName: string; id: string }>>;
   noteId: string;
   pages: ReadonlyArray<Readonly<{ id: string; title: string }>>;
   title: string;
@@ -52,6 +54,7 @@ function ToolbarButton({
 export function RichNoteEditor({
   canEdit,
   content,
+  imageAttachments,
   noteId,
   pages,
   title,
@@ -61,6 +64,10 @@ export function RichNoteEditor({
     JSON.stringify(content),
   );
   const [showInternalLink, setShowInternalLink] = useState(false);
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const [targetImageId, setTargetImageId] = useState(
+    imageAttachments[0]?.id ?? "",
+  );
   const [targetPageId, setTargetPageId] = useState(pages[0]?.id ?? "");
   const editor = useEditor({
     content,
@@ -75,6 +82,10 @@ export function RichNoteEditor({
     },
     extensions: [
       StarterKit.configure({ link: false }),
+      ImageExtension.configure({
+        allowBase64: false,
+        HTMLAttributes: { class: "note-content-image" },
+      }),
       LinkExtension.configure({
         enableClickSelection: true,
         HTMLAttributes: {
@@ -149,6 +160,21 @@ export function RichNoteEditor({
       chain.setLink({ href, target: "_self" }).run();
     }
     setShowInternalLink(false);
+  }
+
+  function insertAttachmentImage() {
+    if (!editor) return;
+    const attachment = imageAttachments.find(({ id }) => id === targetImageId);
+    if (!attachment) return;
+    editor
+      .chain()
+      .focus()
+      .setImage({
+        alt: attachment.fileName,
+        src: `/notes/attachments/${attachment.id}`,
+      })
+      .run();
+    setShowImagePicker(false);
   }
 
   function openActiveLink() {
@@ -280,6 +306,14 @@ export function RichNoteEditor({
         >
           Tabla
         </ToolbarButton>
+        <ToolbarButton
+          active={showImagePicker}
+          disabled={imageAttachments.length === 0}
+          label="Insertar imagen adjunta"
+          onClick={() => setShowImagePicker((visible) => !visible)}
+        >
+          Imagen
+        </ToolbarButton>
         <span aria-hidden="true" className="note-toolbar-separator" />
         <ToolbarButton
           disabled={!editor.can().chain().focus().undo().run()}
@@ -313,6 +347,26 @@ export function RichNoteEditor({
           </select>
           <button onClick={insertInternalLink} type="button">
             Insertar enlace
+          </button>
+        </div>
+      )}
+
+      {showImagePicker && (
+        <div className="note-internal-link-panel">
+          <label htmlFor="internal-note-image">Imagen adjunta</label>
+          <select
+            id="internal-note-image"
+            onChange={(event) => setTargetImageId(event.target.value)}
+            value={targetImageId}
+          >
+            {imageAttachments.map((attachment) => (
+              <option key={attachment.id} value={attachment.id}>
+                {attachment.fileName}
+              </option>
+            ))}
+          </select>
+          <button onClick={insertAttachmentImage} type="button">
+            Insertar imagen
           </button>
         </div>
       )}

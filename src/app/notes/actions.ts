@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireAuthenticatedUser } from "@/lib/auth/session";
+import { NOTE_ATTACHMENT_BUCKET } from "@/lib/notes/attachment-input";
 import { plainTextToNoteDocument } from "@/lib/notes/note-content";
 import {
   createNoteSchema,
@@ -71,6 +72,25 @@ export async function deleteNote(formData: FormData) {
   if (!input.success) redirect("/notes?error=invalid_input");
 
   const supabase = await createSupabaseServerClient();
+  const { data: attachments, error: attachmentError } = await supabase
+    .from("attachments")
+    .select("id,storage_path")
+    .eq("note_id", input.data.noteId);
+  if (attachmentError) redirect("/notes?error=delete_failed");
+
+  if (attachments.length) {
+    const { error: storageError } = await supabase.storage
+      .from(NOTE_ATTACHMENT_BUCKET)
+      .remove(attachments.map(({ storage_path }) => storage_path));
+    if (storageError) redirect("/notes?error=delete_failed");
+
+    const { error: metadataError } = await supabase
+      .from("attachments")
+      .delete()
+      .eq("note_id", input.data.noteId);
+    if (metadataError) redirect("/notes?error=delete_failed");
+  }
+
   const { data, error } = await supabase
     .from("notes")
     .delete()

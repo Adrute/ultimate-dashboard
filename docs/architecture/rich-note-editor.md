@@ -1,7 +1,7 @@
 # Editor enriquecido de notas
 
-**Estado:** implementado en F2-06  
-**Fecha:** 10 de octubre de 2026
+**Estado:** ampliado hasta F2-08
+**Fecha:** 12 de octubre de 2026
 
 ## Decisión
 
@@ -19,6 +19,8 @@ El servidor no acepta HTML. Recibe JSON serializado y lo reconstruye mediante un
 - citas, reglas horizontales, saltos y bloques de código;
 - negrita, cursiva, tachado, código en línea y enlaces;
 - enlaces limitados a HTTP, HTTPS, correo o rutas internas.
+- imágenes limitadas a rutas privadas `/notes/attachments/{uuid}`; no se
+  aceptan URL remotas ni contenido en base64.
 
 Se aplican límites de 200 KB serializados, 50.000 caracteres de texto, 2.000 nodos y 20 niveles. Atributos desconocidos se descartan; nodos, marcas o protocolos desconocidos provocan el rechazo completo. La base de datos exige un documento JSON con raíz `doc` y replica el límite de 200 KB.
 
@@ -30,6 +32,9 @@ Los enlaces internos se generan exclusivamente desde las páginas que el servido
 
 La migración `20261010143000_add_rich_note_content.sql` convierte las notas y versiones existentes en documentos con un párrafo, sin modificar migraciones anteriores. Las restauraciones recuperan título, jerarquía, texto plano y contenido enriquecido de forma conjunta.
 
+Los archivos adjuntos se describen en
+[`note-attachments.md`](./note-attachments.md).
+
 ## Fuera de alcance
 
-Imágenes, adjuntos, menciones, plantillas y edición colaborativa CRDT quedan para verticales posteriores. No se aceptan imágenes embebidas ni HTML arbitrario.
+Menciones, plantillas y edición colaborativa CRDT quedan para verticales posteriores. No se acepta HTML arbitrario.

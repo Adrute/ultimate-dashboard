@@ -11,6 +11,7 @@ const nodeTypes = new Set([
   "hardBreak",
   "heading",
   "horizontalRule",
+  "image",
   "listItem",
   "orderedList",
   "paragraph",
@@ -92,6 +93,34 @@ function normalizeAttributes(
   value: unknown,
 ): NoteAttributes | null {
   const attributes = isRecord(value) ? value : {};
+  if (type === "image") {
+    const src = attributes.src;
+    const alt = attributes.alt;
+    const title = attributes.title;
+    if (
+      typeof src !== "string" ||
+      !/^\/notes\/attachments\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+        src,
+      ) ||
+      !(
+        alt === null ||
+        alt === undefined ||
+        (typeof alt === "string" && alt.length <= 255)
+      ) ||
+      !(
+        title === null ||
+        title === undefined ||
+        (typeof title === "string" && title.length <= 255)
+      )
+    ) {
+      return null;
+    }
+    return {
+      alt: typeof alt === "string" ? alt : null,
+      src,
+      title: typeof title === "string" ? title : null,
+    };
+  }
   if (type === "heading") {
     const level = attributes.level;
     return level === 1 || level === 2 || level === 3 ? { level } : null;
@@ -156,6 +185,7 @@ function hasValidStructure(node: NoteNode): boolean {
     "codeBlock",
     "heading",
     "horizontalRule",
+    "image",
     "orderedList",
     "paragraph",
     "table",
@@ -164,7 +194,8 @@ function hasValidStructure(node: NoteNode): boolean {
   if (
     node.type === "text" ||
     node.type === "hardBreak" ||
-    node.type === "horizontalRule"
+    node.type === "horizontalRule" ||
+    node.type === "image"
   ) {
     return children.length === 0;
   }
@@ -273,6 +304,9 @@ export function noteDocumentToPlainText(document: NoteDocument) {
   function read(node: NoteNode): string {
     if (node.type === "text") return node.text ?? "";
     if (node.type === "hardBreak") return "\n";
+    if (node.type === "image") {
+      return typeof node.attrs?.alt === "string" ? `${node.attrs.alt}\n` : "";
+    }
     const text = node.content?.map(read).join("") ?? "";
     if (["codeBlock", "heading", "paragraph"].includes(node.type)) {
       return `${text}\n`;
@@ -284,4 +318,23 @@ export function noteDocumentToPlainText(document: NoteDocument) {
     .replace(/\n{3,}/g, "\n\n")
     .trimEnd()
     .slice(0, MAX_TEXT_LENGTH);
+}
+
+export function noteDocumentUsesAttachment(
+  document: NoteDocument,
+  attachmentId: string,
+) {
+  return noteDocumentAttachmentIds(document).includes(attachmentId);
+}
+
+export function noteDocumentAttachmentIds(document: NoteDocument) {
+  const identifiers = new Set<string>();
+  function visit(node: NoteNode) {
+    if (node.type === "image" && typeof node.attrs?.src === "string") {
+      identifiers.add(node.attrs.src.slice("/notes/attachments/".length));
+    }
+    node.content?.forEach(visit);
+  }
+  visit(document);
+  return [...identifiers];
 }

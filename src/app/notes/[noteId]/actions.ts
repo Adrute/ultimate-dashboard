@@ -5,7 +5,16 @@ import { redirect } from "next/navigation";
 
 import { requireAuthenticatedUser } from "@/lib/auth/session";
 import {
+  attachmentActionSchema,
+  attachmentNoteSchema,
+  attachmentStoragePath,
+  NOTE_ATTACHMENT_BUCKET,
+  validateAttachmentFile,
+} from "@/lib/notes/attachment-input";
+import {
+  noteDocumentAttachmentIds,
   noteDocumentToPlainText,
+  noteDocumentUsesAttachment,
   plainTextToNoteDocument,
   safeParseNoteDocument,
 } from "@/lib/notes/note-content";
@@ -20,6 +29,21 @@ const value = (data: FormData, key: string) => data.get(key);
 
 function notePath(noteId: string, kind: "error" | "message", code: string) {
   return `/notes/${noteId}?${kind}=${code}`;
+}
+
+async function noteOwnsDocumentAttachments(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  noteId: string,
+  content: NonNullable<ReturnType<typeof safeParseNoteDocument>>,
+) {
+  const attachmentIds = noteDocumentAttachmentIds(content);
+  if (attachmentIds.length === 0) return true;
+  const { count, error } = await supabase
+    .from("attachments")
+    .select("id", { count: "exact", head: true })
+    .eq("note_id", noteId)
+    .in("id", attachmentIds);
+  return !error && count === attachmentIds.length;
 }
 
 export async function createChildNote(formData: FormData) {
@@ -70,6 +94,11 @@ export async function updateDetailedNote(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
+  if (
+    !(await noteOwnsDocumentAttachments(supabase, input.data.noteId, content))
+  ) {
+    redirect(notePath(input.data.noteId, "error", "update_failed"));
+  }
   const { data, error } = await supabase
     .from("notes")
     .update({
@@ -116,6 +145,14 @@ export async function restoreNoteVersion(formData: FormData) {
     redirect(notePath(input.data.noteId, "error", "restore_failed"));
   }
 
+  if (
+    !(await noteOwnsDocumentAttachments(supabase, input.data.noteId, content))
+  ) {
+    redirect(
+      notePath(input.data.noteId, "error", "restore_missing_attachment"),
+    );
+  }
+
   const { data: note, error: updateError } = await supabase
     .from("notes")
     .update({
@@ -136,4 +173,125 @@ export async function restoreNoteVersion(formData: FormData) {
   revalidatePath("/notes");
   revalidatePath(`/notes/${input.data.noteId}`);
   redirect(notePath(input.data.noteId, "message", "restored"));
+}
+
+export async function uploadNoteAttachment(formData: FormData) {
+  const user = await requireAuthenticatedUser();
+  const noteInput = attachmentNoteSchema.safeParse({
+    noteId: value(formData, "noteId"),
+  });
+  const attachment = validateAttachmentFile(value(formData, "attachment"));
+  if (!noteInput.success || !attachment) {
+    redirect(
+      noteInput.success
+        ? notePath(noteInput.data.noteId, "error", "attachment_invalid")
+        : "/notes?error=invalid_input",
+    );
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { data: note, error: noteError } = await supabase
+    .from("notes")
+    .select("id,space_id")
+    .eq("id", noteInput.data.noteId)
+    .maybeSingle();
+  if (noteError || !note) {
+    redirect(notePath(noteInput.data.noteId, "error", "attachment_failed"));
+  }
+
+  const attachmentId = crypto.randomUUID();
+  const storagePath = attachmentStoragePath(
+    note.space_id,
+    note.id,
+    attachmentId,
+    attachment.mimeType,
+  );
+  const { error: uploadError } = await supabase.storage
+    .from(NOTE_ATTACHMENT_BUCKET)
+    .upload(storagePath, attachment.file, {
+      cacheControl: "3600",
+      contentType: attachment.mimeType,
+      upsert: false,
+    });
+  if (uploadError) {
+    redirect(notePath(note.id, "error", "attachment_failed"));
+  }
+
+  const { error: metadataError } = await supabase.from("attachments").insert({
+    created_by: user.id,
+    file_name: attachment.fileName,
+    id: attachmentId,
+    mime_type: attachment.mimeType,
+    note_id: note.id,
+    size_bytes: attachment.file.size,
+    space_id: note.space_id,
+    storage_path: storagePath,
+  });
+  if (metadataError) {
+    await supabase.storage.from(NOTE_ATTACHMENT_BUCKET).remove([storagePath]);
+    redirect(notePath(note.id, "error", "attachment_failed"));
+  }
+
+  revalidatePath(`/notes/${note.id}`);
+  redirect(notePath(note.id, "message", "attachment_uploaded"));
+}
+
+export async function deleteNoteAttachment(formData: FormData) {
+  await requireAuthenticatedUser();
+  const input = attachmentActionSchema.safeParse({
+    attachmentId: value(formData, "attachmentId"),
+    noteId: value(formData, "noteId"),
+  });
+  if (!input.success) redirect("/notes?error=invalid_input");
+
+  const supabase = await createSupabaseServerClient();
+  const { data: attachment, error: attachmentError } = await supabase
+    .from("attachments")
+    .select("id,storage_path")
+    .eq("id", input.data.attachmentId)
+    .eq("note_id", input.data.noteId)
+    .maybeSingle();
+  if (attachmentError || !attachment) {
+    redirect(notePath(input.data.noteId, "error", "attachment_delete_failed"));
+  }
+
+  const { data: note, error: noteError } = await supabase
+    .from("notes")
+    .select("content")
+    .eq("id", input.data.noteId)
+    .maybeSingle();
+  const noteContent = note && safeParseNoteDocument(note.content);
+  if (
+    noteError ||
+    !noteContent ||
+    noteDocumentUsesAttachment(noteContent, attachment.id)
+  ) {
+    redirect(
+      notePath(
+        input.data.noteId,
+        "error",
+        noteContent ? "attachment_in_use" : "attachment_delete_failed",
+      ),
+    );
+  }
+
+  const { error: storageError } = await supabase.storage
+    .from(NOTE_ATTACHMENT_BUCKET)
+    .remove([attachment.storage_path]);
+  if (storageError) {
+    redirect(notePath(input.data.noteId, "error", "attachment_delete_failed"));
+  }
+
+  const { data: deleted, error: deleteError } = await supabase
+    .from("attachments")
+    .delete()
+    .eq("id", attachment.id)
+    .select("id")
+    .maybeSingle();
+  if (deleteError || !deleted) {
+    redirect(notePath(input.data.noteId, "error", "attachment_delete_failed"));
+  }
+
+  revalidatePath(`/notes/${input.data.noteId}`);
+  redirect(notePath(input.data.noteId, "message", "attachment_deleted"));
 }

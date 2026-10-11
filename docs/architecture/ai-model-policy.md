@@ -1,8 +1,8 @@
 # Política de modelos de IA
 
-**Verificado:** 10 de octubre de 2026
+**Verificado:** 12 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-07
+**Ámbito:** sesiones de Codex usadas hasta F2-08
 
 ## Capacidades observadas
 
@@ -77,3 +77,7 @@ La sesión volvió a declarar los mismos modelos delegables y no expuso el ident
 ## Aplicación en F2-07
 
 La sesión volvió a declarar los mismos modelos delegables y no expuso el identificador exacto del orquestador. F2-07 amplía el esquema de contenido aceptado y la navegación entre recursos autorizados, por lo que se ejecutó secuencialmente con razonamiento alto. Se verificó `TableKit` 3.31.4 contra la documentación oficial y se mantuvieron versiones exactas, sin agentes delegados ni servicios externos.
+
+## Aplicación en F2-08
+
+La sesión volvió a declarar los mismos modelos delegables y no expuso el identificador exacto del orquestador. F2-08 afecta archivos privados, rutas firmadas, RLS en Storage y validación de contenido enriquecido, por lo que se ejecutó secuencialmente con razonamiento alto y sin agentes delegados. Se verificaron en documentación oficial el límite de Server Actions de Next.js 16, las políticas de Supabase Storage y `@tiptap/extension-image` 3.31.4 antes de fijar la dependencia.
