@@ -1,6 +1,13 @@
 export type NavigationItem = Readonly<{
   href: `/${string}`;
-  icon: "dashboard" | "home" | "notes" | "projects" | "search" | "tasks";
+  icon:
+    | "calendar"
+    | "dashboard"
+    | "home"
+    | "notes"
+    | "projects"
+    | "search"
+    | "tasks";
   label: string;
 }>;
 
@@ -9,6 +16,11 @@ export const primaryNavigationItems: readonly NavigationItem[] = [
     href: "/dashboard",
     icon: "home",
     label: "Inicio",
+  },
+  {
+    href: "/calendar",
+    icon: "calendar",
+    label: "Calendario",
   },
   {
     href: "/tasks",

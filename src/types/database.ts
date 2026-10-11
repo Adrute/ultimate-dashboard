@@ -77,6 +77,36 @@ export type Database = {
         Update: Record<never, never>;
         Relationships: [];
       };
+      google_connections: {
+        Row: {
+          access_expires_at: string | null;
+          account_email: string;
+          created_at: string;
+          granted_scopes: string[];
+          owner_user_id: string;
+          provider_subject: string;
+          token_ciphertext: string;
+          updated_at: string;
+        };
+        Insert: {
+          access_expires_at?: string | null;
+          account_email: string;
+          created_at?: string;
+          granted_scopes: string[];
+          owner_user_id: string;
+          provider_subject: string;
+          token_ciphertext: string;
+          updated_at?: string;
+        };
+        Update: {
+          access_expires_at?: string | null;
+          account_email?: string;
+          granted_scopes?: string[];
+          provider_subject?: string;
+          token_ciphertext?: string;
+        };
+        Relationships: [];
+      };
       dashboard_widgets: {
         Row: {
           created_at: string;

@@ -30,8 +30,9 @@ Proyecto de suite personal y colaborativa. Nombre provisional.
 - F2-07 implementado: tablas editables y enlaces internos entre páginas autorizadas del mismo espacio.
 - F2-08 implementado: imágenes y adjuntos privados en notas, con Storage, límites de archivo y RLS.
 - F2-09 implementado: búsqueda global de tareas y notas autorizadas, con aislamiento por RLS.
+- F2-10 implementado: conexión OAuth privada de Google Calendar con PKCE, tokens cifrados, revocación y RLS; la lectura y sincronización de eventos quedan para la siguiente vertical.
 
-No hay servicios externos configurados.
+Google Calendar requiere configuración manual y permanece inactivo mientras no se completen las variables privadas indicadas en `.env.example`.
 
 ## Requisitos
 

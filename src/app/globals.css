@@ -975,6 +975,8 @@ a {
 }
 
 .button-primary {
+  display: inline-grid;
+  place-items: center;
   min-height: 2.875rem;
   cursor: pointer;
   padding: var(--space-2) var(--space-4);
@@ -984,6 +986,7 @@ a {
   color: var(--text-on-accent);
   font: inherit;
   font-weight: 750;
+  text-decoration: none;
 }
 
 .button-primary:hover {
@@ -1476,6 +1479,101 @@ a {
   }
 }
 
+/* F2-10: private Google Calendar connection */
+.calendar-page {
+  width: min(100%, 72rem);
+}
+
+.calendar-heading h1 {
+  max-width: 13ch;
+}
+
+.calendar-connection-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-7);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+}
+
+.calendar-connection-card h2,
+.calendar-empty-state h2 {
+  margin: var(--space-2) 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  letter-spacing: -0.04em;
+}
+
+.calendar-connection-card p:not(.eyebrow),
+.calendar-empty-state p,
+.calendar-configuration-note p {
+  max-width: 42rem;
+  margin-block: var(--space-2) 0;
+  color: var(--text-secondary);
+}
+
+.calendar-connection-meta {
+  font-size: 0.8rem;
+}
+
+.calendar-connect-link,
+.calendar-connection-card form > button {
+  min-width: 10rem;
+}
+
+.calendar-configuration-note {
+  max-width: 20rem;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  font-size: 0.82rem;
+}
+
+.calendar-empty-state {
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  align-content: center;
+  margin-top: var(--space-5);
+  padding: var(--space-6);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.calendar-empty-state > span {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 2rem;
+  transform: rotate(45deg);
+}
+
+@media (max-width: 42rem) {
+  .calendar-connection-card {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .calendar-connect-link,
+  .calendar-connection-card form > button {
+    width: 100%;
+  }
+
+  .calendar-configuration-note {
+    max-width: none;
+  }
+}
+
 /* F2-08: private note attachments and embedded images */
 .rich-note-content .note-content-image {
   display: block;
@@ -1952,7 +2050,7 @@ a {
 
   .mobile-bottom-navigation .primary-navigation ul {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0.1rem;
     margin: 0;
   }

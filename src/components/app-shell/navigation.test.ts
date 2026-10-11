@@ -11,7 +11,7 @@ describe("primary navigation", () => {
   });
 
   it("uses one authenticated home destination", () => {
-    expect(primaryNavigationItems).toHaveLength(5);
+    expect(primaryNavigationItems).toHaveLength(6);
     expect(primaryNavigationItems[0]).toMatchObject({
       href: "/dashboard",
       label: "Inicio",

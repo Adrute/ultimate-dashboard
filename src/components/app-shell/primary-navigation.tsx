@@ -23,6 +23,14 @@ function DashboardIcon() {
   );
 }
 
+function CalendarIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+      <path d="M5 5.75h14v14H5zM8 3.75v4M16 3.75v4M5 9.75h14" />
+    </svg>
+  );
+}
+
 function TasksIcon() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -59,9 +67,17 @@ function ProjectsIcon() {
 function NavigationIcon({
   icon,
 }: {
-  icon: "dashboard" | "home" | "notes" | "projects" | "search" | "tasks";
+  icon:
+    | "calendar"
+    | "dashboard"
+    | "home"
+    | "notes"
+    | "projects"
+    | "search"
+    | "tasks";
 }) {
   if (icon === "home") return <HomeIcon />;
+  if (icon === "calendar") return <CalendarIcon />;
   if (icon === "tasks") return <TasksIcon />;
   if (icon === "search") return <SearchIcon />;
   if (icon === "notes") return <NotesIcon />;

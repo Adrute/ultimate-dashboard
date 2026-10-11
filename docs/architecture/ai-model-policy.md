@@ -2,7 +2,7 @@
 
 **Verificado:** 12 de octubre de 2026
 
-**Ámbito:** sesiones de Codex usadas hasta F2-09
+**Ámbito:** sesiones de Codex usadas hasta F2-10
 
 ## Capacidades observadas
 
@@ -85,3 +85,7 @@ La sesión volvió a declarar los mismos modelos delegables y no expuso el ident
 ## Aplicación en F2-09
 
 La disponibilidad declarada no cambió. F2-09 amplía una consulta SQL sujeta a RLS y la presentación de resultados autorizados, por lo que se ejecutó secuencialmente con razonamiento alto, sin delegación ni dependencias nuevas. El entorno sigue sin exponer el identificador exacto, nivel de razonamiento o coste del orquestador activo.
+
+## Aplicación en F2-10
+
+La sesión volvió a declarar los mismos modelos delegables y no expuso el identificador exacto del orquestador. F2-10 afecta OAuth, secretos, cifrado, revocación y RLS, por lo que se ejecutó secuencialmente con razonamiento alto y sin agentes delegados. Se verificaron en fuentes oficiales el flujo web de Google con acceso offline, PKCE y los ámbitos mínimos de Calendar antes de fijar `google-auth-library` 11.2.0.
